@@ -15,7 +15,9 @@
 
     var user = new User({ email : 'mattmuelle@gmail.com ' });
     console.log(user.toJSON());
-    user.save();
+
+    console.log(User.attrs['email']);
+
   </script>
 </body>
 </html>
