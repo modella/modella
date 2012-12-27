@@ -1,5 +1,6 @@
 {
   "name" : "modella",
+  "version" : "0.0.1",
   "repo" : "matthewmueller/modella",
   "description" : "simplified models",
   "dependencies" : {
