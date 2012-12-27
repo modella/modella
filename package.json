@@ -1,0 +1,16 @@
+{
+  "name": "modella",
+  "version": "0.0.1",
+  "description": "simplified models",
+  "keywords": [],
+  "author": "matthew mueller <mattmuelle@gmail.com>",
+  "dependencies": {
+    "emitter": "component/emitter",
+    "superagent": "~0.10.0"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "better-assert": "*"
+  },
+  "main": "index"
+}

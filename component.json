@@ -1,0 +1,16 @@
+{
+  "name" : "modella",
+  "repo" : "matthewmueller/modella",
+  "description" : "simplified models",
+  "dependencies" : {
+    "component/emitter" : "*",
+    "visionmedia/superagent" : "*"
+  },
+  "scripts" : [
+    "index.js",
+    "lib/model.js",
+    "lib/proto.js",
+    "lib/static.js",
+    "lib/sync.js"
+  ]
+}
