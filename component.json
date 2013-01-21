@@ -1,17 +1,19 @@
 {
-  "name" : "modella",
-  "version" : "0.0.3",
-  "repo" : "matthewmueller/modella",
-  "description" : "simplified models",
-  "dependencies" : {
-    "component/emitter" : "*",
-    "visionmedia/superagent" : "*"
+  "name": "modella",
+  "version": "0.0.3",
+  "repo": "matthewmueller/modella",
+  "description": "simplified models",
+  "dependencies": {
+    "component/emitter": "*",
+    "visionmedia/superagent": "*",
+    "component/clone": "*"
   },
-  "scripts" : [
+  "scripts": [
     "index.js",
     "lib/model.js",
     "lib/proto.js",
     "lib/static.js",
-    "lib/sync.js"
+    "lib/sync.js",
+    "lib/utils.js"
   ]
 }
