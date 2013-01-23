@@ -15,7 +15,7 @@ var User = model('User')
 function required(attr) {
   return function(Model){
     Model.validate(function(model){
-      console.log(attr, model.has(attr), model[attr]());
+      // console.log(attr, model.has(attr), model[attr]());
       if (!model.has(attr)) model.error(attr, 'field required');
     });
   };
@@ -341,7 +341,7 @@ describe('Model#save(fn)', function(){
         pet.save(function(err){
           assert(!err);
           pet.name(null);
-          console.log('name', pet.name());
+          // console.log('name', pet.name());
           pet.save(function(err){
             assert('validation failed' == err.message);
             assert(1 == pet.errors.length);
