@@ -13,10 +13,9 @@
       .attr('_id', { type : 'string' })
       .attr('email', { type : 'string' });
 
-    var user = new User({ email : 'mattmuelle@gmail.com ' });
+    var user = new User({ email : 'mattmuelle@gmail.com', foo : 'bar'});
     console.log(user.toJSON());
 
-    console.log(User.attrs['email']);
 
   </script>
 </body>
