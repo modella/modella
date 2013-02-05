@@ -1,5 +1,12 @@
 
-n.n.n / 2012-12-31
+0.0.4 / 2013-02-05
+==================
+
+  * only add attributes that are in the schema
+  * server can "fix" attributes when it send data back down to client
+  * starting tests
+
+0.0.3 / 2012-12-31
 ==================
 
   * fixed race condition
