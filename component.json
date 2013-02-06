@@ -5,8 +5,7 @@
   "description": "simplified models",
   "dependencies": {
     "component/emitter": "*",
-    "visionmedia/superagent": "*",
-    "component/clone": "*"
+    "visionmedia/superagent": "*"
   },
   "scripts": [
     "index.js",
@@ -14,6 +13,6 @@
     "lib/proto.js",
     "lib/static.js",
     "lib/sync.js",
-    "lib/utils.js"
+    "lib/clone.js"
   ]
 }
