@@ -1,4 +1,10 @@
 
+0.0.5 / 2013-02-05
+==================
+
+  * added clone internally
+  * fixed objectid cloning issue
+
 0.0.4 / 2013-02-05
 ==================
 
