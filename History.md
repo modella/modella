@@ -1,4 +1,11 @@
 
+0.0.6 / 2013-02-20
+==================
+
+  * fix clone
+  * return false if no results found with #get
+  * added 'error' events
+
 0.0.5 / 2013-02-05
 ==================
 
