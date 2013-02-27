@@ -5,8 +5,8 @@
   "keywords": [],
   "author": "matthew mueller <mattmuelle@gmail.com>",
   "dependencies": {
-    "emitter": "component/emitter",
-    "superagent": "~0.10.0"
+    "superagent": "~0.10.0",
+    "emitter-component": "~1.0.0"
   },
   "devDependencies": {
     "mocha": "*",
