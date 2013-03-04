@@ -9,8 +9,11 @@
     "emitter-component": "~1.0.0"
   },
   "devDependencies": {
+    "chai": "*",
+    "sinon": "*",
+    "sinon-chai": "*",
     "mocha": "*",
-    "better-assert": "*"
+    "express": "*"
   },
   "main": "index"
 }
