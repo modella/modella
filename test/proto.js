@@ -164,7 +164,15 @@ describe('Model#remove()', function() {
     });
 
     it('emits "remove" on the constructor', function(done) {
-      User.on('remove', function(obj) {
+      User.once('remove', function(obj) {
+        obj.should.eq(user);
+        done()
+      });
+      user.remove();
+    });
+
+    it('emits "removing" on the constructor', function(done) {
+      User.once('removing', function(obj) {
         obj.should.eq(user);
         done()
       });
