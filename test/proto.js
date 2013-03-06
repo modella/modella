@@ -181,7 +181,7 @@ describe("Model#save()", function() {
       syncUpdate                   , 
       syncMock = {
         save: function(callback) {
-          callback();
+          callback(null, { id : '100', name : 'someguy' });
         },
         update: function(callback) {
           callback();
@@ -241,6 +241,29 @@ describe("Model#save()", function() {
         done()
       });
       pet.save();
+    });
+
+    it('updates attributes based on syncs response', function(done) {
+      user.save(function() {
+        user.name().should.eq('someguy')
+        user.id().should.eq('100')
+        done()
+      });
+    });
+
+    it('doesn\'t update attributes if sync fails', function(done) {
+      user.name('dave');
+
+      User.sync = {
+        save: function(cb) {
+          cb(new Error("Some Error"), {name: "Robert"});
+        }
+      }
+
+      user.save(function() {
+        user.name().should.eq('dave');
+        done();
+      });
     });
 
     describe('and new', function() {

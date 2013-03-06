@@ -1,9 +1,9 @@
 var model = require("../");
 
 var User = model('User')
-  .attr('id', { type: 'number' })
-  .attr('name', { type: 'string' })
-  .attr('age', { type: 'number' });
+    .attr('id', { type: 'number' })
+    .attr('name', { type: 'string' })
+    .attr('age', { type: 'number' });
 
 
 describe('model(name)', function() {
