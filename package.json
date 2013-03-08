@@ -16,5 +16,7 @@
     "expect.js" : "*",
     "express": "*"
   },
-  "main": "index"
+  "scripts": {
+    "test": "make test"
+  }
 }
