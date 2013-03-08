@@ -1,9 +1,22 @@
-var model = require("../");
+/**
+ * Module dependencies
+ */
+
+var model = require("../"),
+    expect = require('expect.js');
+
+/**
+ * Initialize `User`
+ */
 
 var User = model('User')
   .attr('id', { type: 'number' })
   .attr('name', { type: 'string' })
   .attr('age', { type: 'number' });
+
+/**
+ * Model#<attr>(value)
+ */
 
 describe('Model#<attr>(value)', function() {
   var user;
@@ -13,18 +26,18 @@ describe('Model#<attr>(value)', function() {
   });
 
   it('returns itself', function() {
-    user.name('Bob').should.eq(user);
+    expect(user.name('Bob')).to.equal(user);
   });
 
   it('sets a value', function() {
     user.name('Bob');
-    user.name().should.eq('Bob');
+    expect(user.name()).to.equal('Bob');
   });
 
   it('emits "change <attr>" events', function(done){
     user.on('change name', function(newVal, old) {
-      newVal.should.eq('Bob');
-      old.should.eq('Tobi');
+      expect(newVal).to.equal('Bob');
+      expect(old).to.equal('Tobi');
       done();
     });
 
@@ -33,9 +46,9 @@ describe('Model#<attr>(value)', function() {
 
   it('emits "change" events', function(done) {
     user.on('change', function(prop, newVal, old) {
-      prop.should.eq('name');
-      newVal.should.eq('Bob');
-      old.should.eq('Tobi');
+      expect(prop).to.equal('name');
+      expect(newVal).to.equal('Bob');
+      expect(old).to.equal('Tobi');
       done();
     });
 
@@ -46,26 +59,26 @@ describe('Model#<attr>(value)', function() {
 describe('Model#isNew()', function() {
   it('defaults to true', function() {
     var user = new User();
-    user.isNew().should.eq(true)
+    expect(user.isNew()).to.equal(true)
   });
 
   it('is false when primary key is present', function() {
-    var user = new User({id: 1});
-    user.isNew().should.eq(false)
+    var user = new User({ id: 1 });
+    expect(user.isNew()).to.equal(false)
   });
 });
 
 describe('Model#model', function() {
   it('references the constructor', function() {
     var user = new User();
-    user.model.should.eq(User)
+    expect(user.model).to.equal(User)
   });
 });
 
 describe('Model#get(attr)', function() {
   it('returns an attr value', function() {
-    var user = new User({name: 'Tobi'});
-    user.get('name').should.eq('Tobi');
+    var user = new User({ name: 'Tobi' });
+    expect(user.get('name')).to.equal('Tobi');
   });
 });
 
@@ -73,79 +86,73 @@ describe('Model#has(attr)', function() {
   var user;
 
   beforeEach(function() {
-    user = new User({name: 'Tobi'});
+    user = new User({ name: 'Tobi' });
   });
 
   it('returns true if the object has the attr', function() {
-    user.has('name').should.eq(true)
+    expect(user.has('name')).to.equal(true)
   });
 
   it('returns false if the object doesn\'t have the attr', function() {
     var user = new User();
-    user.has('age').should.eq(false)
+    expect(user.has('age')).to.equal(false)
   });
 });
 
 describe('Model#remove()', function() {
-  var syncMock = {
-    remove: function(callback) {
-      callback();
-    }
-  };
-
-  var syncRemove = sinon.spy(syncMock, 'remove');
+  function remove(fn) {
+    return fn();
+  }
 
   it('throws an error if it\'s new', function(done) {
     var user = new User;
     user.remove(function(err) {
-      err.message.should.eq('not saved');
+      expect(err.message).to.equal('not saved');
       done();
     });
   });
 
   it('calls Model.sync#remove', function(done) {
-    User.sync = syncMock
     var user = new User({id: 123});
-    user.remove(function() {
-      syncRemove.should.have.been.calledOnce;
-      done()
-    });
+    user.model.sync.remove = remove;
+    user.remove(done);
   });
 
-  describe('with error from sync', function() {
-    var user,
-        error = new Error("Some error");
 
-    beforeEach(function() {
-      User.sync = {
-        remove: function(cb) {
-          cb(error);
-        }
-      };
-      user = new User({id: 123});
-    });
+  describe('with error from sync', function() {
+    var error = new Error('some error');
+
+    function remove(fn) {
+      return fn(error);
+    }
 
     it('emits "error"', function(done) {
+      var user = new User({ id : 123 });
+      user.model.sync.remove = remove;
       user.on('error', function(err) {
-        err.should.eq(error);
+        expect(err).to.equal(error);
         done();
       });
-      user.remove()
+      user.remove();
     });
   });
 
   describe('with success from sync', function() {
     var user;
 
+    function remove(fn) {
+      fn();
+    }
+
     beforeEach(function() {
-      User.sync = syncMock
       user = new User({id: 123});
+      user.model.sync.remove = remove;
     });
 
     it('sets removed to true', function(done) {
       user.on('remove', function() {
-        user.removed.should.eq(true)
-        done()
+        expect(user.removed).to.equal(true);
+        done();
       });
       user.remove();
     });
@@ -157,67 +164,48 @@ describe('Model#remove()', function() {
 
     it('emits "removing"', function(done) {
       user.on('removing', function(obj) {
-        obj.should.eq(user);
-        done()
+        expect(obj).to.equal(user);
+        done();
       });
       user.remove();
     });
 
     it('emits "remove" on the constructor', function(done) {
       User.once('remove', function(obj) {
-        obj.should.eq(user);
-        done()
+        expect(obj).to.equal(user);
+        done();
       });
       user.remove();
     });
 
     it('emits "removing" on the constructor', function(done) {
       User.once('removing', function(obj) {
-        obj.should.eq(user);
-        done()
+        expect(obj).to.equal(user);
+        done();
       });
       user.remove();
     });
   });
+
 });
 
 describe("Model#save()", function() {
-  var user,
-      pet                , 
-      Pet = model('Pet') , 
-      syncSave                     , 
-      syncUpdate                   , 
-      syncMock = {
-        save: function(callback) {
-          callback(null, { id : '100', name : 'someguy' });
-        },
-        update: function(callback) {
-          callback();
-        }
-      };
+  var user;
+
+  function save(fn) {
+    fn(null, { id : '100', name : 'someguy' });
+  }
 
   beforeEach(function() {
-    User.sync = syncMock;
     user = new User();
-    pet = new Pet();
-    syncSave   = sinon.spy(syncMock, 'save'),
-    syncUpdate = sinon.spy(syncMock, 'update');
-  });
-
-  afterEach(function() {
-    syncSave.restore();
-    syncUpdate.restore();
+    user.model.sync.save = save;
   });
 
   it("runs validations", function (done) {
-    User.sync = syncMock;
-    var user     = new User,
-        validate = sinon.spy(user, 'validate');
-
-    user.save(function() {
-      validate.should.have.been.called;
+    user.validate = function() {
       done();
-    });
+    }
+    user.save();
   });
 
   describe("when valid", function() {
@@ -228,116 +216,121 @@ describe("Model#save()", function() {
 
     it('emits "saving"', function(done) {
       user.once('saving', function(obj) {
-        obj.should.eq(user);
-        done()
+        expect(obj).to.equal(user);
+        done();
       });
       user.save();
     });
 
     it('emits "save" on the constructor', function(done) {
-      User.sync = syncMock;
       User.once('save', function(obj) {
-        obj.should.eq(user);
-        done()
+        expect(obj).to.equal(user);
+        done();
       });
       user.save();
     });
 
     it('emits "saving" on the constructor', function(done) {
-      Pet.once('saving', function(obj) {
-        obj.should.eq(pet);
-        done()
+      User.once('saving', function(obj) {
+        expect(obj).to.equal(user);
+        done();
       });
-      pet.save();
+      user.save();
     });
 
     it('updates attributes based on syncs response', function(done) {
       user.save(function() {
-        user.name().should.eq('someguy')
-        user.id().should.eq('100')
-        done()
+        expect(user.name()).to.equal('someguy');
+        expect(user.id()).to.equal('100');
+        done();
       });
     });
 
     it('doesn\'t update attributes if sync fails', function(done) {
       user.name('dave');
 
-      User.sync = {
-        save: function(cb) {
-          cb(new Error("Some Error"), {name: "Robert"});
-        }
+      user.model.sync.save = function(fn) {
+        fn(new Error('some error'), { name : 'robbay'});
       }
 
       user.save(function() {
-        user.name().should.eq('dave');
+        expect(user.name()).to.equal('dave');
         done();
       });
     });
 
-    describe('and new', function() {
+    describe('when new', function() {
       it('calls Model.sync#save', function(done) {
-        user.save(function() {
-          syncSave.should.have.been.calledOnce;
-          done()
-        });
+        user.model.sync.save = function(fn) { fn(); }
+        user.save(done);
       });
     });
+
     describe("when old", function() {
       it('calls Model.sync#update', function(done) {
-        User.sync = syncMock;
-        var user = new User({id: 123});
-        user.name('Bob');
-        user.save(function() {
-          syncUpdate.should.have.been.calledOnce;
-          done()
-        });
+        var user = new User({ id: 123, name: 'Bob' });
+        user.model.sync.update = function(fn) { fn(); }
+        user.save(done);
       });
     });
   });
+
   describe("when invalid", function() {
     beforeEach(function() {
-      Pet = model('Pet').attr('id').attr('name')
-      pet = new Pet();
-      pet.isValid = function() { return false; }
+      user.isValid = function() { return false; };
     });
 
     it("should not call Model.sync#save", function(done) {
-      pet.save(function() {
-        syncSave.should.not.have.been.called
-        done()
+      var called = false;
+      user.model.sync.save = function() {
+        called = true;
+      };
+
+      user.save(function() {
+        expect(called).to.be(false);
+        done();
       });
     });
 
     it("should pass the error to the callback", function(done) {
-      pet.save(function(err) {
-        err.message.should.eq('validation failed');
-        done()
+      user.save(function(err) {
+        expect(err.message).to.equal('validation failed');
+        done();
       });
     });
   });
 
   describe("Model#url(path)", function() {
     var user;
+
     beforeEach(function() {
       user = new User;
       user.id(5);
     });
 
     it("uses the model id", function() {
-      user.url().should.eq('/user/5');
+      expect(user.url()).to.equal('/user/5');
     });
 
     it("passes along the path", function() {
-      user.url('edit').should.eq('/user/5/edit');
+      expect(user.url('edit')).to.equal('/user/5/edit');
     });
   });
 
   describe("Model#toJSON()", function() {
     it('returns a JSON object', function() {
-      var user = new User({name: 'Tobi', age: 2});
+      var user = new User({ name: 'Tobi', age: 2 });
       var obj = user.toJSON();
-      obj.name.should.eq('Tobi');
-      obj.age.should.eq(2);
+      expect(obj.name).to.equal('Tobi');
+      expect(obj.age).to.equal(2);
+    });
+
+    it('should clone, not reference the object', function() {
+      var json = { name : 'matt' };
+      var user = new User(json);
+      json.name = 'ryan';
+      var obj = user.toJSON();
+      expect(obj.name).to.equal('matt');
     });
   });
 
@@ -358,23 +351,23 @@ describe("Model#save()", function() {
       user = new User;
       user.isValid();
 
-      user.errors.length.should.eq(2);
+      expect(user.errors).to.have.length(2);
 
-      user.errors[0].attr.should.eq('name');
-      user.errors[1].attr.should.eq('email');
-      
-      user.errors[0].message.should.eq('name is required');
-      user.errors[1].message.should.eq('email is required');
+      expect(user.errors[0].attr).to.equal('name');
+      expect(user.errors[1].attr).to.equal('email');
+
+      expect(user.errors[0].message).to.equal('name is required');
+      expect(user.errors[1].message).to.equal('email is required');
     });
 
     it('returns false when invalid', function() {
       user = new User;
-      user.isValid().should.eq(false);
+      expect(user.isValid()).to.equal(false);
     });
 
     it('returns true when valid', function() {
       user = new User({name: 'Tobi', email: 'tobi@hello.com'});
-      user.isValid().should.eq(true);
+      expect(user.isValid()).to.equal(true);
     });
   });
 });
