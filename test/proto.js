@@ -15,7 +15,7 @@ var User = model('User')
   .attr('age', { type: 'number' });
 
 /**
- * Model#<attr>(value)
+ * Test proto
  */
 
 describe('Model#<attr>(value)', function() {

@@ -6,7 +6,7 @@ var model = require("../"),
     expect = require('expect.js');
 
 /**
- * Tests
+ * Initialize `User`
  */
 
 var User = model('User')
@@ -14,6 +14,9 @@ var User = model('User')
     .attr('name', { type: 'string' })
     .attr('age', { type: 'number' });
 
+/**
+ * Test model
+ */
 
 describe('model(name)', function() {
   it('returns a new model constructor', function(){
