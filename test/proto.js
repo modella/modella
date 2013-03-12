@@ -56,6 +56,24 @@ describe('Model#<attr>(value)', function() {
   });
 });
 
+describe('Model#set(attrs)', function() {
+  it('should set multiple attributes', function() {
+    var user = new User();
+    user.set({
+      name : 'matt',
+      age : 23
+    });
+    expect(user.name()).to.equal('matt');
+    expect(user.age()).to.equal(23);
+  });
+
+  it('should ignore attributes not in schema', function(){
+    var user = new User();
+    user.set({ omg : 'lol' })
+    expect(user.omg).to.be(undefined);
+  });
+});
+
 describe('Model#isNew()', function() {
   it('defaults to true', function() {
     var user = new User();
