@@ -1,4 +1,11 @@
 
+0.0.9 / 2013-03-11
+==================
+
+  * ignore values set that aren't in the schema
+  * added npm test for travis
+  * tests looking good
+
 0.0.8 / 2013-03-03
 ==================
 
