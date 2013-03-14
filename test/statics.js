@@ -59,6 +59,7 @@ describe("Model.all", function() {
 
   beforeEach(function() {
     User = model('User').attr('name');
+    User.sync = {}
     User.sync.all = all;
   });
 

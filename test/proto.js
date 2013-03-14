@@ -14,6 +14,8 @@ var User = model('User')
   .attr('name', { type: 'string' })
   .attr('age', { type: 'number' });
 
+User.sync = {};
+
 /**
  * Test proto
  */
