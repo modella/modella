@@ -18,7 +18,14 @@ var User = model('User').attr('name');
 
 describe('Model.attrs', function() {
   it('holds the defined attrs', function() {
-    expect(User.attrs).to.have.property('name')
+    expect(User.attrs).to.have.property('name');
+  });
+});
+
+describe('Model.attr', function() {
+  it("adds a default value if specified", function() {
+    var Pet = model('Pet').attr('name', {defaultValue: 'Samson'});
+    expect(Pet._defaults).to.have.property('name', 'Samson');
   });
 });
 
