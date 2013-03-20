@@ -1,7 +1,7 @@
 {
   "name": "modella",
-  "version": "0.0.10",
-  "repo": "matthewmueller/modella",
+  "version": "0.0.11",
+  "repo": "modella/modella",
   "description": "simplified models",
   "dependencies": {
     "component/emitter": "*",

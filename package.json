@@ -1,12 +1,12 @@
 {
   "name": "modella",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "simplified models",
-  "keywords": [],
+  "keywords": ["modella", "models"],
   "author": "matthew mueller <mattmuelle@gmail.com>",
   "dependencies": {
     "superagent": "~0.10.0",
-    "emitter": "component/emitter"
+    "emitter": "component/emitter#1.0.0"
   },
   "devDependencies": {
     "mocha": "*",
