@@ -54,7 +54,7 @@ describe("Model.use", function() {
   it("passes Model into a plugin function", function() {
     var plugin = function(model) {
       expect(model).to.equal(User);
-    }
+    };
     User.use(plugin);
   });
 });
@@ -66,7 +66,7 @@ describe("Model.all", function() {
 
   beforeEach(function() {
     User = model('User').attr('name');
-    User.sync = {}
+    User.sync = {};
     User.sync.all = all;
   });
 
@@ -89,7 +89,7 @@ describe("Model.all", function() {
     };
 
     User.all(function(err, users) {
-      expect(err).to.be.an(Error)
+      expect(err).to.be.an(Error);
       expect(err.message).to.equal('some err');
       done();
     });
