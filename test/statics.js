@@ -27,6 +27,16 @@ describe('Model.attr', function() {
     var Pet = model('Pet').attr('name', {defaultValue: 'Samson'});
     expect(Pet._defaults).to.have.property('name', 'Samson');
   });
+
+  it("causes the model to trigger the attrAdded event", function(done) {
+    User.once('attrAdded', function(attr, options) {
+      expect(attr).to.be('age');
+      expect(options).to.have.property('defaultValue');
+      done();
+    });
+
+    User.attr('age', {defaultValue: 22});
+  });
 });
 
 describe("Model.validate", function() {
