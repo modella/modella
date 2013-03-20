@@ -16,6 +16,23 @@ var User = model('User').attr('name');
  * Test statics
  */
 
+describe('Model.sync', function() {
+  it('sets the private _sync variable', function() {
+    var syncMock = { name: 'syncMock' };
+    User.useSync(syncMock);
+    expect(User._sync).to.be(syncMock);
+  });
+
+  it('emits the syncSet event', function(done) {
+    var syncMock = { name: 'syncMock' };
+    User.once('syncSet', function(sync) {
+      expect(sync.name).to.be('syncMock');
+      done();
+    });
+    User.useSync(syncMock);
+  });
+});
+
 describe('Model.attrs', function() {
   it('holds the defined attrs', function() {
     expect(User.attrs).to.have.property('name');
@@ -76,12 +93,12 @@ describe("Model.all", function() {
 
   beforeEach(function() {
     User = model('User').attr('name');
-    User.sync = {};
-    User.sync.all = all;
+    User.useSync({});
+    User._sync.all = all;
   });
 
   it("calls the sync object", function(done) {
-    User.sync.all = function(fn) { fn(); };
+    User._sync.all = function(fn) { fn(); };
     User.all(done);
   });
 
@@ -94,7 +111,7 @@ describe("Model.all", function() {
   });
 
   it("passes along errors", function(done) {
-    User.sync.all = function(fn) {
+    User._sync.all = function(fn) {
       return fn(new Error('some err'));
     };
 
