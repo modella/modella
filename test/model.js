@@ -36,18 +36,34 @@ describe('new Model(attrs)', function() {
     var user = new User();
     expect(user.name()).to.equal('Bobby');
   });
+
+  it('emits the initialize event', function(done) {
+    User.once('initialize', function(passedUser) {
+      expect(passedUser).to.be.a(User);
+      done();
+    });
+    var user = new User();
+  });
 });
 
 describe('Model(attrs)', function() {
   it('populates the attrs', function() {
-    var user = new User({name: 'Tobi', age: 22});
+    var user = User({name: 'Tobi', age: 22});
     expect(user.name()).to.equal('Tobi');
     expect(user.age()).to.equal(22);
   });
 
   it('sets the default values', function() {
-    var user = new User();
+    var user = User();
     expect(user.name()).to.equal('Bobby');
+  });
+
+  it('emits the initialize event', function(done) {
+    User.once('initialize', function(passedUser) {
+      expect(passedUser).to.be.a(User);
+      done();
+    });
+    var user = User();
   });
 });
 

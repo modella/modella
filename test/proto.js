@@ -14,7 +14,7 @@ var User = model('User')
   .attr('name', { type: 'string' })
   .attr('age', { type: 'number' });
 
-User.useSync({});
+User._sync = {};
 
 /**
  * Test proto
@@ -79,7 +79,6 @@ describe('Model#set(attrs)', function() {
 describe('Model#isNew()', function() {
   it('defaults to true', function() {
     var user = new User();
-    debugger;
     expect(user.isNew()).to.equal(true);
   });
 
