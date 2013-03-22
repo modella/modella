@@ -14,7 +14,7 @@ var User = model('User')
   .attr('name', { type: 'string' })
   .attr('age', { type: 'number' });
 
-User.sync = {};
+User._sync = {};
 
 /**
  * Test proto
@@ -36,8 +36,8 @@ describe('Model#<attr>(value)', function() {
     expect(user.name()).to.equal('Bob');
   });
 
-  it('emits "change <attr>" events', function(done){
-    user.on('change name', function(newVal, old) {
+  it('emits "change:<attr>" events', function(done){
+    user.on('change:name', function(newVal, old) {
       expect(newVal).to.equal('Bob');
       expect(old).to.equal('Tobi');
       done();
@@ -71,7 +71,7 @@ describe('Model#set(attrs)', function() {
 
   it('should ignore attributes not in schema', function(){
     var user = new User();
-    user.set({ omg : 'lol' })
+    user.set({ omg : 'lol' });
     expect(user.omg).to.be(undefined);
   });
 });
@@ -79,19 +79,19 @@ describe('Model#set(attrs)', function() {
 describe('Model#isNew()', function() {
   it('defaults to true', function() {
     var user = new User();
-    expect(user.isNew()).to.equal(true)
+    expect(user.isNew()).to.equal(true);
   });
 
   it('is false when primary key is present', function() {
     var user = new User({ id: 1 });
-    expect(user.isNew()).to.equal(false)
+    expect(user.isNew()).to.equal(false);
   });
 });
 
 describe('Model#model', function() {
   it('references the constructor', function() {
     var user = new User();
-    expect(user.model).to.equal(User)
+    expect(user.model).to.equal(User);
   });
 });
 
@@ -110,12 +110,12 @@ describe('Model#has(attr)', function() {
   });
 
   it('returns true if the object has the attr', function() {
-    expect(user.has('name')).to.equal(true)
+    expect(user.has('name')).to.equal(true);
   });
 
   it('returns false if the object doesn\'t have the attr', function() {
     var user = new User();
-    expect(user.has('age')).to.equal(false)
+    expect(user.has('age')).to.equal(false);
   });
 });
 
@@ -125,16 +125,16 @@ describe('Model#remove()', function() {
   }
 
   it('throws an error if it\'s new', function(done) {
-    var user = new User;
+    var user = new User();
     user.remove(function(err) {
       expect(err.message).to.equal('not saved');
       done();
     });
   });
 
-  it('calls Model.sync#remove', function(done) {
+  it('calls Model._sync#remove', function(done) {
     var user = new User({id: 123});
-    user.model.sync.remove = remove;
+    user.model._sync.remove = remove;
     user.remove(done);
   });
 
@@ -148,7 +148,7 @@ describe('Model#remove()', function() {
 
     it('emits "error"', function(done) {
       var user = new User({ id : 123 });
-      user.model.sync.remove = remove;
+      user.model._sync.remove = remove;
       user.on('error', function(err) {
         expect(err).to.equal(error);
         done();
@@ -166,7 +166,7 @@ describe('Model#remove()', function() {
 
     beforeEach(function() {
       user = new User({id: 123});
-      user.model.sync.remove = remove;
+      user.model._sync.remove = remove;
     });
 
     it('sets removed to true', function(done) {
@@ -218,13 +218,13 @@ describe("Model#save()", function() {
 
   beforeEach(function() {
     user = new User();
-    user.model.sync.save = save;
+    user.model._sync.save = save;
   });
 
   it("runs validations", function (done) {
     user.validate = function() {
       done();
-    }
+    };
     user.save();
   });
 
@@ -269,9 +269,9 @@ describe("Model#save()", function() {
     it('doesn\'t update attributes if sync fails', function(done) {
       user.name('dave');
 
-      user.model.sync.save = function(fn) {
+      user.model._sync.save = function(fn) {
         fn(new Error('some error'), { name : 'robbay'});
-      }
+      };
 
       user.save(function() {
         expect(user.name()).to.equal('dave');
@@ -280,16 +280,16 @@ describe("Model#save()", function() {
     });
 
     describe('when new', function() {
-      it('calls Model.sync#save', function(done) {
-        user.model.sync.save = function(fn) { fn(); }
+      it('calls Model._sync#save', function(done) {
+        user.model._sync.save = function(fn) { fn(); };
         user.save(done);
       });
     });
 
     describe("when old", function() {
-      it('calls Model.sync#update', function(done) {
+      it('calls Model._sync#update', function(done) {
         var user = new User({ id: 123, name: 'Bob' });
-        user.model.sync.update = function(fn) { fn(); }
+        user.model._sync.update = function(fn) { fn(); };
         user.save(done);
       });
     });
@@ -300,9 +300,9 @@ describe("Model#save()", function() {
       user.isValid = function() { return false; };
     });
 
-    it("should not call Model.sync#save", function(done) {
+    it("should not call Model._sync#save", function(done) {
       var called = false;
-      user.model.sync.save = function() {
+      user.model._sync.save = function() {
         called = true;
       };
 
@@ -324,7 +324,7 @@ describe("Model#save()", function() {
     var user;
 
     beforeEach(function() {
-      user = new User;
+      user = new User();
       user.id(5);
     });
 
@@ -360,15 +360,15 @@ describe("Model#save()", function() {
       .attr('email');
 
     User.validate(function(user){
-      if (!user.has('name')) user.error('name', 'name is required');
+      if (!user.has('name')) { user.error('name', 'name is required'); }
     });
 
     User.validate(function(user){
-      if (!user.has('email')) user.error('email', 'email is required');
+      if (!user.has('email')) { user.error('email', 'email is required'); }
     });
 
     it('populates #errors', function() {
-      user = new User;
+      user = new User();
       user.isValid();
 
       expect(user.errors).to.have.length(2);
@@ -381,7 +381,7 @@ describe("Model#save()", function() {
     });
 
     it('returns false when invalid', function() {
-      user = new User;
+      user = new User();
       expect(user.isValid()).to.equal(false);
     });
 

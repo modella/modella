@@ -66,12 +66,12 @@ describe("Model.all", function() {
 
   beforeEach(function() {
     User = model('User').attr('name');
-    User.sync = {};
-    User.sync.all = all;
+    User._sync = {};
+    User._sync.all = all;
   });
 
   it("calls the sync object", function(done) {
-    User.sync.all = function(fn) { fn(); };
+    User._sync.all = function(fn) { fn(); };
     User.all(done);
   });
 
@@ -84,7 +84,7 @@ describe("Model.all", function() {
   });
 
   it("passes along errors", function(done) {
-    User.sync.all = function(fn) {
+    User._sync.all = function(fn) {
       return fn(new Error('some err'));
     };
 
