@@ -5,7 +5,8 @@
   "description": "simplified models",
   "dependencies": {
     "component/emitter": "*",
-    "visionmedia/superagent": "*"
+    "visionmedia/superagent": "*",
+    "ForbesLindesay/is-browser" : "*"
   },
   "scripts": [
     "index.js",

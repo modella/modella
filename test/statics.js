@@ -86,5 +86,35 @@ describe("Model.all", function() {
       done();
     });
   });
+
+  describe('Model.configure', function () {
+
+    it('will run server-specific configurations', function() {
+      var one = false, two = false, three = false, four = false;
+
+      User.configure('server', function() {
+        one = true;
+      });
+
+      User.configure('node', function() {
+        two = true;
+      });
+
+      User.configure('node.js', function() {
+        three = true;
+      });
+
+      User.configure('zomg', function() {
+        three = true;
+      });
+
+      expect(one).to.be(true);
+      expect(two).to.be(true);
+      expect(three).to.be(true);
+      expect(four).to.be(false);
+    });
+
+    // TODO: figure out how to test client-side
+  });
 });
 

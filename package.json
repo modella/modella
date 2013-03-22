@@ -6,14 +6,15 @@
   "author": "matthew mueller <mattmuelle@gmail.com>",
   "dependencies": {
     "superagent": "~0.10.0",
-    "emitter": "component/emitter"
+    "emitter": "component/emitter",
+    "is-browser": "~2.0.0"
   },
   "devDependencies": {
     "chai": "*",
     "sinon": "*",
     "sinon-chai": "*",
     "mocha": "*",
-    "expect.js" : "*",
+    "expect.js": "*",
     "express": "*"
   },
   "scripts": {
