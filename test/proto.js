@@ -56,6 +56,18 @@ describe('Model#<attr>(value)', function() {
 
     user.name('Bob');
   });
+
+  it('marks the attr as dirty', function() {
+    user.name('Bob');
+    expect(user.changed('name')).to.be(true);
+  });
+
+  describe('with the same value', function() {
+    it("doesn't mark it as dirty", function() {
+      user.name('Tobi');
+      expect(user.changed('name')).to.be(false);
+    });
+  });
 });
 
 describe('Model#set(attrs)', function() {
