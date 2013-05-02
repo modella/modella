@@ -2,4 +2,7 @@
  * Module dependencies
  */
 
-module.exports = require('./lib/model');
+var modella = module.exports = require('./lib/model');
+
+modella.utils = {};
+modella.utils.clone = require('./lib/clone');
