@@ -67,6 +67,14 @@ describe('Model(attrs)', function() {
   });
 });
 
+describe('new Model([attrs])', function() {
+  it("returns an array of Models", function() {
+    var users = new User([{name: 'Bobby'}, {name: 'Tobi'}]);
+    expect(users[0].name()).to.be('Bobby');
+    expect(users[1].name()).to.be('Tobi');
+  });
+});
+
 describe('Model([attrs])', function() {
   it("returns an array of Models", function() {
     var users = User([{name: 'Bobby'}, {name: 'Tobi'}]);
