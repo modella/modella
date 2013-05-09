@@ -5,7 +5,6 @@
   "keywords": ["modella", "models"],
   "author": "matthew mueller <mattmuelle@gmail.com>",
   "dependencies": {
-    "superagent": "~0.10.0",
     "emitter": "component/emitter#1.0.0"
   },
   "devDependencies": {
