@@ -48,7 +48,7 @@ an object. Modella does not use these options, but plugins may.
       .attr('username', { required: true })
       .attr('email', { required: true, format: 'email' });
 
-### Model.Validate( fn )
+### Model.validate( fn )
 
 Adds a validator to the model. A validator should add error messages for
 attributes that fail validation. Note that plugins such as
