@@ -12,6 +12,7 @@
     "lib/model.js",
     "lib/proto.js",
     "lib/static.js",
-    "lib/clone.js"
+    "lib/utils/clone.js",
+    "lib/utils/type.js"
   ]
 }
