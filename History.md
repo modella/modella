@@ -1,4 +1,15 @@
 
+0.1.1 / 2013-06-16 
+==================
+
+ * Greatly simplified dirty checking on array and object
+ * Switched to cloning for accessor
+ * Updated dirty checking, again
+ * Removed superagent dep
+ * Fixed defaults not being copys
+ * Styling changes
+ * Added some basic docs
+
 0.0.9 / 2013-03-11
 ==================
 
