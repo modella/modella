@@ -5,7 +5,8 @@
   "keywords": ["modella", "models"],
   "author": "matthew mueller <mattmuelle@gmail.com>",
   "dependencies": {
-    "emitter": "component/emitter#1.0.0"
+    "emitter": "component/emitter#1.0.0",
+    "array.js": "*"
   },
   "devDependencies": {
     "mocha": "*",

@@ -5,7 +5,8 @@
   "description": "simplified models",
   "dependencies": {
     "component/emitter": "*",
-    "visionmedia/superagent": "*"
+    "visionmedia/superagent": "*",
+    "matthewmueller/array": "*"
   },
   "scripts": [
     "index.js",

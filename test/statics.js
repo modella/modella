@@ -78,7 +78,17 @@ describe("Model.all", function() {
   it("returns objects from the sync layer", function(done) {
     User.all(function(err, users) {
       expect(users).to.have.length(2);
-      expect(users[0].name()).to.equal('Bob');
+      expect(users[0].name).to.equal('Bob');
+      done();
+    });
+  });
+
+  it("supports array.js", function(done) {
+    User.all(function(err, users) {
+      var names = users.map('name');
+      expect(names).to.have.length(2);
+      expect(names[0]).to.equal('Bob');
+      expect(names[1]).to.equal('Tom');
       done();
     });
   });
