@@ -4,8 +4,7 @@
   "repo": "modella/modella",
   "description": "simplified models",
   "dependencies": {
-    "component/emitter": "*",
-    "visionmedia/superagent": "*"
+    "component/emitter": "1.0.1"
   },
   "scripts": [
     "index.js",

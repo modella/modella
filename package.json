@@ -2,14 +2,17 @@
   "name": "modella",
   "version": "0.1.1",
   "description": "simplified models",
-  "keywords": ["modella", "models"],
+  "keywords": [
+    "modella",
+    "models"
+  ],
   "author": "matthew mueller <mattmuelle@gmail.com>",
   "dependencies": {
-    "emitter": "component/emitter#1.0.0"
+    "emitter-component": "1.0.1"
   },
   "devDependencies": {
     "mocha": "*",
-    "expect.js" : "*",
+    "expect.js": "*",
     "express": "*"
   },
   "scripts": {
