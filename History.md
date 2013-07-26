@@ -1,5 +1,10 @@
 
-0.1.1 / 2013-06-16 
+0.1.2 / 2013-07-26
+==================
+
+ * fixed emitter for lame npm upgrade
+
+0.1.1 / 2013-06-16
 ==================
 
  * Greatly simplified dirty checking on array and object
