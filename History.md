@@ -1,7 +1,7 @@
-
 0.1.4 / 2013-09-14 
 ==================
 
+  * Bug fix on default values where they are null or 0
   * Added create event
 
 0.1.3 / 2013-09-14 
