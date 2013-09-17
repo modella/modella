@@ -14,8 +14,6 @@ var User = model('User')
   .attr('name', { type: 'string' })
   .attr('age', { type: 'number' });
 
-User._sync = {};
-
 /**
  * Test proto
  */
@@ -163,14 +161,13 @@ describe('Model#remove()', function() {
     });
   });
 
-  it('calls Model._sync#remove', function(done) {
+  it('calls Model.remove', function(done) {
     var user = new User({id: 123});
-    user.model._sync.remove = remove;
+    user.model.remove = remove;
     user.remove(done);
   });
 
-
-  describe('with error from sync', function() {
+  describe('with error', function() {
     var error = new Error('some error');
 
     function remove(fn) {
@@ -179,7 +176,7 @@ describe('Model#remove()', function() {
 
     it('emits "error"', function(done) {
       var user = new User({ id : 123 });
-      user.model._sync.remove = remove;
+      user.model.remove = remove;
       user.on('error', function(err) {
         expect(err).to.equal(error);
         done();
@@ -188,7 +185,7 @@ describe('Model#remove()', function() {
     });
   });
 
-  describe('with success from sync', function() {
+  describe('with success', function() {
     var user;
 
     function remove(fn) {
@@ -197,7 +194,7 @@ describe('Model#remove()', function() {
 
     beforeEach(function() {
       user = new User({id: 123});
-      user.model._sync.remove = remove;
+      user.model.remove = remove;
     });
 
     it('sets removed to true', function(done) {
@@ -249,7 +246,7 @@ describe("Model#save()", function() {
 
   beforeEach(function() {
     user = new User();
-    user.model._sync.save = save;
+    user.model.save = save;
   });
 
   it("runs validations", function (done) {
@@ -289,7 +286,7 @@ describe("Model#save()", function() {
       user.save();
     });
 
-    it('updates attributes based on syncs response', function(done) {
+    it('updates attributes based on save response', function(done) {
       user.save(function() {
         expect(user.name()).to.equal('someguy');
         expect(user.id()).to.equal('100');
@@ -297,10 +294,10 @@ describe("Model#save()", function() {
       });
     });
 
-    it('doesn\'t update attributes if sync fails', function(done) {
+    it('doesn\'t update attributes if save fails', function(done) {
       user.name('dave');
 
-      user.model._sync.save = function(fn) {
+      user.model.save = function(fn) {
         fn(new Error('some error'), { name : 'robbay'});
       };
 
@@ -311,16 +308,16 @@ describe("Model#save()", function() {
     });
 
     describe('when new', function() {
-      it('calls Model._sync#save', function(done) {
-        user.model._sync.save = function(fn) { fn(); };
+      it('calls Model.save', function(done) {
+        user.model.save = function(fn) { fn(); };
         user.save(done);
       });
     });
 
     describe("when old", function() {
-      it('calls Model._sync#update', function(done) {
+      it('calls Model.update', function(done) {
         var user = new User({ id: 123, name: 'Bob' });
-        user.model._sync.update = function(fn) { fn(); };
+        user.model.update = function(fn) { fn(); };
         user.save(done);
       });
     });
@@ -331,9 +328,9 @@ describe("Model#save()", function() {
       user.isValid = function() { return false; };
     });
 
-    it("should not call Model._sync#save", function(done) {
+    it("should not call Model.save", function(done) {
       var called = false;
-      user.model._sync.save = function() {
+      user.model.save = function() {
         called = true;
       };
 

@@ -74,7 +74,7 @@ initial values by passing in an object for `initialValues`
 
     var bob = new User({username: 'Bob' });
 
-### Model#<attribute>(value)
+### Model#attribute(value)
 
 Sets the given attribute to a value.
 
@@ -202,10 +202,36 @@ Points to the base model from which the instance was created.
     user.model === User
       => true
 
+# Storage Layer Plugins
 
-# Sync
+A sync plugin is a Modella plugin that implements `Model.save`, `Model.update`,
+and `Model.remove` static methods which are invoked by `model#save` and
+`model#remove` with `this` bound to the model instance. See the
+[memory plugin](https://github.com/alexmingoia/modella-memory) for a bare bones
+implementation.
 
-TODO: Write some documentation
+A sync plugin must add the following methods to the Model class and implement
+the required callback signatures:
+
+### Model.save(function(error, attributes))
+
+Model.save is called with `this` bound to the model instance. It must store
+the instance's attributes and execute the callback with arguments `error` and
+`attributes`.
+
+This method saves the instance for the first time, so must include the newly
+created id in `attributes`.
+
+### Model.update(function(error, attributes))
+
+Model.update has the same signature as `Model.save` but the instance already
+has a primary id field, as it was previously saved.
+
+### Model.remove(function(error))
+
+Model.remove is called with `this` bound to the model instance. It must remove
+the instance from storage and execute the callback with an optional `error`
+argument.
 
 # Events
 
