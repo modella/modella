@@ -1,4 +1,19 @@
 
+n.n.n / 2013-09-27 
+==================
+
+ * Fixed a bug where redefining an attribute would cause all of its options to be lost
+ * Release 0.1.5
+ * Add hack for clone on BSON objects
+ * Release 0.1.4
+ * Bug fix on default values where they are null or 0
+ * Release 0.1.4
+ * Added create event
+ * Release 0.1.3
+ * Added res signature for save and remove.
+ * Release 0.1.2
+ * fixed emitter for lame npm upgrade
+
 0.1.5 / 2013-09-20 
 ==================
 
