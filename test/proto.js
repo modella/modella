@@ -20,6 +20,25 @@ User._sync = {};
  * Test proto
  */
 
+describe('Model#changed()', function(){
+  it('should return a cloned object of changed attrs', function(){
+    var user = new User({ name: 'baz' });
+    expect(user.changed()).to.eql({});
+    user.name('foo');
+    expect(user.changed()).to.eql({ name: 'foo' });
+    expect(user.changed()).to.not.equal(user.dirty);
+  })
+})
+
+describe('Model#changed(attr)', function(){
+  it('should return a boolean if attr was changed', function(){
+    var user = new User({ name: 'baz' });
+    expect(user.changed('name')).to.eql(false);
+    user.name('foo');
+    expect(user.changed('name')).to.eql(true);
+  })
+})
+
 describe('Model#<attr>(value)', function() {
   var user;
 
