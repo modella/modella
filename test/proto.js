@@ -56,7 +56,7 @@ describe('Model#<attr>(value)', function() {
   });
 
   it('emits "change:<attr>" events', function(done){
-    user.on('change:name', function(newVal, old) {
+    user.on('change name', function(newVal, old) {
       expect(newVal).to.equal('Bob');
       expect(old).to.equal('Tobi');
       done();
