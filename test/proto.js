@@ -348,23 +348,6 @@ describe("Model#save()", function() {
     });
   });
 
-  describe("Model#url(path)", function() {
-    var user;
-
-    beforeEach(function() {
-      user = new User();
-      user.id(5);
-    });
-
-    it("uses the model id", function() {
-      expect(user.url()).to.equal('/user/5');
-    });
-
-    it("passes along the path", function() {
-      expect(user.url('edit')).to.equal('/user/5/edit');
-    });
-  });
-
   describe("Model#toJSON()", function() {
     it('returns a JSON object', function() {
       var user = new User({ name: 'Tobi', age: 2 });
