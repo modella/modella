@@ -103,6 +103,24 @@ describe('Model#set(attrs)', function() {
     user.set({ omg : 'lol' });
     expect(user.omg).to.be(undefined);
   });
+
+  it('emits setting on the Model', function(){
+    var user = new User();
+    User.once('setting', function(user, attrs) {
+      attrs.name = 'ryan';
+    });
+    user.set({ name : 'matt' });
+    expect(user.name()).to.be('ryan');
+  });
+
+  it('emits setting on the instance', function(){
+    var user = new User();
+    user.once('setting', function(attrs) {
+      attrs.name = 'ryan';
+    });
+    user.set({ name : 'matt' });
+    expect(user.name()).to.be('ryan');
+  });
 });
 
 describe('Model#isNew()', function() {
@@ -391,18 +409,64 @@ describe("Model#save()", function() {
       expect(user.errors[1].message).to.equal('email is required');
     });
 
-    it('returns false when invalid', function() {
-      user = new User();
-      expect(user.isValid()).to.equal(false);
+    describe('when invalid', function() {
+      beforeEach(function() {
+        user = new User();
+      });
+
+      it('returns false', function() {
+        expect(user.isValid()).to.equal(false);
+      });
+
+      it('emits invalid on the model', function(done) {
+        User.once('invalid', function(instance, errors) {
+          expect(user).to.be(instance);
+          expect(errors).to.be.a(Array);
+          done();
+        });
+        user.isValid();
+      });
+
+      it('emits invalid on the instance', function(done) {
+        user.once('invalid', function(errors) {
+          expect(this).to.be(user);
+          expect(errors).to.be.a(Array);
+          done();
+        });
+        user.isValid();
+      });
+
     });
 
-    it('returns true when valid', function() {
-      user = new User({name: 'Tobi', email: 'tobi@hello.com'});
-      expect(user.isValid()).to.equal(true);
+    describe('when valid', function() {
+      beforeEach(function() {
+        user = new User({name: 'Tobi', email: 'tobi@hello.com'});
+      });
+
+      it('returns true', function() {
+        expect(user.isValid()).to.equal(true);
+      });
+
+      it('emits valid on the model', function(done) {
+        User.once('valid', function(instance, errors) {
+          expect(user).to.be(instance);
+          expect(errors).to.be(null);
+          done();
+        });
+        user.isValid();
+      });
+
+      it('emits valid on the instance', function(done) {
+        user.once('valid', function(errors) {
+          expect(this).to.be(user);
+          expect(errors).to.be(null);
+          done();
+        });
+        user.isValid();
+      });
     });
   });
 });
-
 
 
 
