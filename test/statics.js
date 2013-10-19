@@ -57,25 +57,23 @@ describe("Model.use", function() {
     };
     User.use(plugin);
   });
-});
 
-describe('Model.configure', function () {
-  it('will run server-specific configurations', function() {
+  it('will run server-specific plugins', function() {
     var one = false, two = false, three = false, four = false;
 
-    User.configure('server', function() {
+    User.use('server', function() {
       one = true;
     });
 
-    User.configure('node', function() {
+    User.use('node', function() {
       two = true;
     });
 
-    User.configure('node.js', function() {
+    User.use('node.js', function() {
       three = true;
     });
 
-    User.configure('zomg', function() {
+    User.use('zomg', function() {
       three = true;
     });
 
