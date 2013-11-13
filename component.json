@@ -4,7 +4,8 @@
   "repo": "modella/modella",
   "description": "simplified models",
   "dependencies": {
-    "component/emitter": "1.0.1"
+    "component/emitter": "1.0.1",
+    "ForbesLindesay/is-browser": "2.0.0"
   },
   "scripts": [
     "index.js",

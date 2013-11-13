@@ -1,12 +1,15 @@
 # modella [![Build Status](https://secure.travis-ci.org/modella/modella.png?branch=master)](http://travis-ci.org/modella/modella)
 
-  simplified models
+  Highly extendable bloat-free models.  
 
 ## Philosophy
 
 `modella` is a bare bones model. It exposes a few APIs on which plugins can be
 built to enhance functionality. Usage of these plugins enables high-powered but
 bloat free models.
+
+Check out the [list of available
+plugins](https://github.com/modella/modella/wiki/List-of-Modella-Plugins#wiki-misc)
 
 # Defining Models
 
@@ -74,7 +77,7 @@ initial values by passing in an object for `initialValues`
 
     var bob = new User({username: 'Bob' });
 
-### Model#<attribute>(value)
+### Model#attribute(value)
 
 Sets the given attribute to a value.
 
@@ -202,18 +205,97 @@ Points to the base model from which the instance was created.
     user.model === User
       => true
 
+# Writing Plugins
 
-# Sync
+Modella is made to be extended! Use events to hook into modella and manipulate
+the data as necessary. See below for the list of events.
 
-TODO: Write some documentation
+For types of plugins, and more comprehensive documentation, see the [plugin writing
+guide](https://github.com/modella/modella/wiki/Plugin-Writing-Guide).
+
 
 # Events
 
 All modella models have built in emitters on both instances and the model
 itself.
 
-TODO: Write some documentation
+You can listen for an event on either the `Model` or an `instance` of the Model.
 
-## License
+You can listen just once by running `once` instead of `on`.
 
-MIT
+```js
+  var user = new User()
+  User.on('save', function(u) {
+    user == u // true
+  });
+
+  user.once('save', function() {
+    user.remove(); // Why? Nobody knows...
+  });
+```
+## List of All Events
+
+### Validation Events
+
+- `invalid` trigger when `isValid()` or `validate()` fails.
+- `valid` trigger when `isValid()` or `validate()` passes.
+
+### Save Events
+
+- `saving` triggers before saving has occurred.
+- `save` happens after a save has occurred.
+- `create` happens after a record is saved for the first time.
+
+### Manipulation Events
+
+- `initializing` triggers when a new `instance` is created. Passes `attrs` which
+  can be modified by the listener.
+
+```js
+User.on('initializing', function(instance, attrs) {
+  attrs.name = attrs.name.toUpperCase();
+});
+var bob = new User({name: 'Bob'});
+bob.name() // => BOB
+```
+
+- `setting` triggers when `instance.set` is called. Passes `attrs` which can
+  be modified in the listener.
+
+```js
+User.on('setting', function(instance, attrs) {
+  attrs.name = attrs.name.toUpperCase();
+});
+var bob = new User();
+bob.set({name: 'Bob'});
+bob.name() // => BOB
+```
+
+### Other Events
+
+- `initialize` triggers when a model has been completely initialized.
+- `change <attr>` triggers when `attr` changes (via `set` or
+  `model.attr(newVal)`.
+
+# License
+
+(The MIT License)
+
+Copyright (c) 2013 Ryan Schmukler <ryan@slingingcode.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the 'Software'), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

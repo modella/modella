@@ -57,42 +57,29 @@ describe("Model.use", function() {
     };
     User.use(plugin);
   });
-});
 
-describe("Model.all", function() {
-  function all(fn) {
-    return fn(null, [{ name : 'Bob' }, { name : 'Tom' }]);
-  }
+  it('will run server-specific plugins', function() {
+    var one = false, two = false, three = false, four = false;
 
-  beforeEach(function() {
-    User = model('User').attr('name');
-    User._sync = {};
-    User._sync.all = all;
-  });
-
-  it("calls the sync object", function(done) {
-    User._sync.all = function(fn) { fn(); };
-    User.all(done);
-  });
-
-  it("returns objects from the sync layer", function(done) {
-    User.all(function(err, users) {
-      expect(users).to.have.length(2);
-      expect(users[0].name()).to.equal('Bob');
-      done();
+    User.use('server', function() {
+      one = true;
     });
-  });
 
-  it("passes along errors", function(done) {
-    User._sync.all = function(fn) {
-      return fn(new Error('some err'));
-    };
-
-    User.all(function(err, users) {
-      expect(err).to.be.an(Error);
-      expect(err.message).to.equal('some err');
-      done();
+    User.use('node', function() {
+      two = true;
     });
+
+    User.use('node.js', function() {
+      three = true;
+    });
+
+    User.use('zomg', function() {
+      three = true;
+    });
+
+    expect(one).to.be(true);
+    expect(two).to.be(true);
+    expect(three).to.be(true);
+    expect(four).to.be(false);
   });
 });
-

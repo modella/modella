@@ -37,7 +37,21 @@ describe('new Model(attrs)', function() {
     expect(user.name()).to.equal('Bobby');
   });
 
-  it('emits the initialize event', function(done) {
+  it('emits the initializing event on the Model', function(done) {
+    var attributes = { name: 'Bob' },
+        called = false;
+    User.once('initializing', function(instance, attrs) {
+      called = true;
+      expect(attrs).to.eql(attributes);
+      attrs.name = attrs.name + 'by';
+    });
+    var user = new User(attributes);
+    expect(user.name()).to.be('Bobby');
+    expect(called).to.be(true);
+    done();
+  });
+
+  it('emits the initialize event on the Model', function(done) {
     User.once('initialize', function(passedUser) {
       expect(passedUser).to.be.a(User);
       done();
