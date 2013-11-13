@@ -1,4 +1,13 @@
 
+0.2.0 / 2013-11-12 
+==================
+
+ * Release 0.2.0
+ * Implemented more robust events [References #21]
+ * Merged Model.configure into overloaded Model.use
+ * Remove _sync and rely on sync-plugins to monkey patch sync methods. Closes #12
+ * Switched 'change:blah' to 'change blah' [References #17]
+
 0.1.7 / 2013-10-11 
 ==================
 
