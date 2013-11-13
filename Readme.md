@@ -1,12 +1,15 @@
 # modella [![Build Status](https://secure.travis-ci.org/modella/modella.png?branch=master)](http://travis-ci.org/modella/modella)
 
-  simplified models
+  Highly extendable bloat-free models.  
 
 ## Philosophy
 
 `modella` is a bare bones model. It exposes a few APIs on which plugins can be
 built to enhance functionality. Usage of these plugins enables high-powered but
 bloat free models.
+
+Check out the [list of available
+plugins](https://github.com/modella/modella/wiki/List-of-Modella-Plugins#wiki-misc)
 
 # Defining Models
 
@@ -202,44 +205,97 @@ Points to the base model from which the instance was created.
     user.model === User
       => true
 
-# Storage Layer Plugins
+# Writing Plugins
 
-A sync plugin is a Modella plugin that implements `Model.save`, `Model.update`,
-and `Model.remove` static methods which are invoked by `model#save` and
-`model#remove` with `this` bound to the model instance. See the
-[memory plugin](https://github.com/alexmingoia/modella-memory) for a bare bones
-implementation.
+Modella is made to be extended! Use events to hook into modella and manipulate
+the data as necessary. See below for the list of events.
 
-A sync plugin must add the following methods to the Model class and implement
-the required callback signatures:
+For types of plugins, and more comprehensive documentation, see the [plugin writing
+guide](https://github.com/modella/modella/wiki/Plugin-Writing-Guide).
 
-### Model.save(function(error, attributes))
-
-Model.save is called with `this` bound to the model instance. It must store
-the instance's attributes and execute the callback with arguments `error` and
-`attributes`.
-
-This method saves the instance for the first time, so must include the newly
-created id in `attributes`.
-
-### Model.update(function(error, attributes))
-
-Model.update has the same signature as `Model.save` but the instance already
-has a primary id field, as it was previously saved.
-
-### Model.remove(function(error))
-
-Model.remove is called with `this` bound to the model instance. It must remove
-the instance from storage and execute the callback with an optional `error`
-argument.
 
 # Events
 
 All modella models have built in emitters on both instances and the model
 itself.
 
-TODO: Write some documentation
+You can listen for an event on either the `Model` or an `instance` of the Model.
 
-## License
+You can listen just once by running `once` instead of `on`.
 
-MIT
+```js
+  var user = new User()
+  User.on('save', function(u) {
+    user == u // true
+  });
+
+  user.once('save', function() {
+    user.remove(); // Why? Nobody knows...
+  });
+```
+## List of All Events
+
+### Validation Events
+
+- `invalid` trigger when `isValid()` or `validate()` fails.
+- `valid` trigger when `isValid()` or `validate()` passes.
+
+### Save Events
+
+- `saving` triggers before saving has occurred.
+- `save` happens after a save has occurred.
+- `create` happens after a record is saved for the first time.
+
+### Manipulation Events
+
+- `initializing` triggers when a new `instance` is created. Passes `attrs` which
+  can be modified by the listener.
+
+```js
+User.on('initializing', function(instance, attrs) {
+  attrs.name = attrs.name.toUpperCase();
+});
+var bob = new User({name: 'Bob'});
+bob.name() // => BOB
+```
+
+- `setting` triggers when `instance.set` is called. Passes `attrs` which can
+  be modified in the listener.
+
+```js
+User.on('setting', function(instance, attrs) {
+  attrs.name = attrs.name.toUpperCase();
+});
+var bob = new User();
+bob.set({name: 'Bob'});
+bob.name() // => BOB
+```
+
+### Other Events
+
+- `initialize` triggers when a model has been completely initialized.
+- `change <attr>` triggers when `attr` changes (via `set` or
+  `model.attr(newVal)`.
+
+# License
+
+(The MIT License)
+
+Copyright (c) 2013 Ryan Schmukler <ryan@slingingcode.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the 'Software'), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
