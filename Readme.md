@@ -9,7 +9,7 @@ built to enhance functionality. Usage of these plugins enables high-powered but
 bloat free models.
 
 Check out the [list of available
-plugins](https://github.com/modella/modella/wiki/List-of-Modella-Plugins#wiki-misc)
+plugins](https://github.com/modella/modella/wiki/List-of-Modella-Plugins)
 
 # Defining Models
 
