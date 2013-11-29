@@ -9,7 +9,8 @@
   "author": "matthew mueller <mattmuelle@gmail.com>",
   "dependencies": {
     "emitter-component": "1.0.1",
-    "is-browser": "~2.0.0"
+    "is-browser": "~2.0.0",
+    "map-series": "~0.0.2"
   },
   "devDependencies": {
     "mocha": "*",

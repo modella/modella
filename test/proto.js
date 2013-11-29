@@ -288,6 +288,18 @@ describe("Model#save()", function() {
       user.save();
     });
 
+    it('validates on .saving', function(done) {
+      user.once('saving', function(obj, fn) {
+        obj.errors.push(new Error('not valid'))
+        fn();
+      });
+      user.save(function(err) {
+        expect(err.message).to.equal('validation failed');
+        expect(user.errors[0].message).to.equal('not valid');
+        done();
+      });
+    });
+
     it('emits "save" on the constructor', function(done) {
       User.once('save', function(obj) {
         expect(obj).to.equal(user);
