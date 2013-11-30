@@ -25,16 +25,16 @@ plugins](https://github.com/modella/modella/wiki/List-of-Modella-Plugins)
 
 All `modella` definition methods are chainable.
 
-### modella( modelName )
+### modella( name )
 
-Creates a new model with the name `modelName`.
+Creates a new model with the name `name`.
 
 ```js
 var modella = require('modella');
 var User = modella('User');
 ```
 
-### Model.use ( [environment], modellaPlugin )
+### Model.use ( [environment], fn )
 
 As mentioned in the philosophy, `modella`'s goal is to make it easy to extend
 models with plugins. This lets you create models that do exactly what you need,
@@ -64,7 +64,7 @@ User.use('server', plugin);
 User.use('node', plugin);
 ```
 
-### Model.attr( attrName, [options] )
+### Model.attr( name, [options] )
 
 Adds attribute `attrName` to a model. Additional `options` can be passed in as
 an object. Modella does not use these options, but plugins may.
@@ -101,10 +101,10 @@ User.validate(function(user) {
 
 # Working with Instances
 
-### new Model([initialValues])
+### new Model( [attrs] )
 
 You can create instances of models with the `new` operator. You can also specify
-initial values by passing in an object for `initialValues`
+initial values by passing in an object for `attrs`.
 
 ```js
 var user = new User();
@@ -132,7 +132,7 @@ var user = new User({username: 'Bob'});
 user.username() // => 'Bob'
 ```
 
-### Model#get( attribute )
+### Model#get( attr )
 
 Returns the value of the attribute
 
@@ -141,7 +141,7 @@ var user = new User({username: 'Bob'});
 
 user.get('username') // => 'Bob'
 
-### Model#has( attribute )
+### Model#has( attr )
 
 Returns whether an instance has an attribute set.
 
@@ -151,7 +151,7 @@ var user = new User({username: 'Bob'});
 user.has('email') // => false
 ```
 
-### Model#set( properties )
+### Model#set( attrs )
 
 Quickly sets multiple attributes.
 
@@ -161,9 +161,9 @@ var user = new User();
 user.set({username: 'Bob', email: 'bob@bobbington.com'});
 ```
 
-### Model#primary([ value ])
+### Model#primary([ key ])
 
-Gets or sets the value of the primary key attribute. By default, this auto-maps to an
+Gets or sets the value of the primary `key` attribute. By default, this auto-maps to an
 attribute with the name of `_id` or `id` if it is specified.
 
 Getting the primary key:
@@ -295,7 +295,7 @@ You can listen for an event on either the `instance` of a model or the `Model` i
 var user = new User()
 
 user.on('save', function() {
-  user.remove(); // Why? Nobody knows...
+  user.remove();
 });
 ```
 
@@ -362,7 +362,7 @@ user.on('removing', function(done) {
 ### Manipulation Events
 
 - `change <attr>` triggers when `attr` changes (via `set` or
-  `model.attr(newVal)`.
+  `model.attr(val)`.
 
 ```js
 user.on('change name', function(val, prev) {
