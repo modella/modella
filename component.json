@@ -1,12 +1,13 @@
 {
   "name": "modella",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "repo": "modella/modella",
   "description": "simplified models",
   "dependencies": {
     "component/emitter": "1.0.1",
     "ForbesLindesay/is-browser": "2.0.0",
-    "ramitos/map-series": "0.0.2"
+    "ramitos/map-series": "0.0.2",
+    "modella/modella": "*"
   },
   "scripts": [
     "index.js",
@@ -15,5 +16,6 @@
     "lib/static.js",
     "lib/utils/clone.js",
     "lib/utils/type.js"
-  ]
+  ],
+  "remotes": []
 }

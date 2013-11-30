@@ -1,5 +1,11 @@
 
-0.2.0 / 2013-11-12 
+0.2.1 / 2013-11-29
+==================
+
+ * only validate on `saving` event (@ramitos)
+ * runs 'saving' events in series and validates on each (@ramitos) [fixes #11]
+
+0.2.0 / 2013-11-12
 ==================
 
  * Release 0.2.0
@@ -8,28 +14,28 @@
  * Remove _sync and rely on sync-plugins to monkey patch sync methods. Closes #12
  * Switched 'change:blah' to 'change blah' [References #17]
 
-0.1.7 / 2013-10-11 
+0.1.7 / 2013-10-11
 ==================
 
   * repair .changed()
 
-0.1.6 / 2013-09-27 
+0.1.6 / 2013-09-27
 ==================
 
  * Fixed a bug where redefining an attribute would cause all of its options to be lost
 
-0.1.5 / 2013-09-20 
+0.1.5 / 2013-09-20
 ==================
 
   * Add hack for clone on BSON objects
 
-0.1.4 / 2013-09-14 
+0.1.4 / 2013-09-14
 ==================
 
   * Bug fix on default values where they are null or 0
   * Added create event
 
-0.1.3 / 2013-09-14 
+0.1.3 / 2013-09-14
 ==================
 
   * Added res signature for save and remove.
