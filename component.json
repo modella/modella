@@ -6,8 +6,7 @@
   "dependencies": {
     "component/emitter": "1.0.1",
     "ForbesLindesay/is-browser": "2.0.0",
-    "ramitos/map-series": "0.0.2",
-    "modella/modella": "*"
+    "ramitos/map-series": "0.0.2"
   },
   "scripts": [
     "index.js",
