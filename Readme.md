@@ -25,25 +25,28 @@ plugins](https://github.com/modella/modella/wiki/List-of-Modella-Plugins)
 
 All `modella` definition methods are chainable.
 
-### modella( modelName )
+### modella( name )
 
-Creates a new model with the name `modelName`.
+Creates a new model with the name `name`.
 
-    var modella = require('modella'),
-           User = modella('User');
+```js
+var modella = require('modella');
+var User = modella('User');
+```
 
-
-### Model.use ( [environment], modellaPlugin )
+### Model.use ( [env], fn )
 
 As mentioned in the philosophy, `modella`'s goal is to make it easy to extend
 models with plugins. This lets you create models that do exactly what you need,
-and nothing more. You can use `environment` to target the client and the server separately.
+and nothing more. You can use `env` to target the client and the server separately.
 
-    var modella = require('modella'),
-     validators = require('modella-validators'),
-           User = modella('User');
+```js
+var modella = require('modella');
+var validators = require('modella-validators');
+var User = modella('User');
 
-    User.use(validators);
+User.use(validators);
+```
 
 Browser plugin:
 
@@ -61,21 +64,23 @@ User.use('server', plugin);
 User.use('node', plugin);
 ```
 
-### Model.attr( attrName, [options] )
+### Model.attr( name, [options] )
 
 Adds attribute `attrName` to a model. Additional `options` can be passed in as
 an object. Modella does not use these options, but plugins may.
 
-    var modella = require('modella'),
-     validators = require('modella-validators'),
-           User = modella('User');
+```js
+var modella = require('modella'),
+var validators = require('modella-validators'),
+var User = modella('User');
 
-    User.use(validators);
+User.use(validators);
 
-    User
-      .attr('_id')
-      .attr('username', { required: true })
-      .attr('email', { required: true, format: 'email' });
+User
+  .attr('_id')
+  .attr('username', { required: true })
+  .attr('email', { required: true, format: 'email' });
+```
 
 ### Model.validate( fn )
 
@@ -84,152 +89,192 @@ attributes that fail validation. Note that plugins such as
 [modella/validators](http://github.com/modella/validators) make extensive use of
 this.
 
-    var User = modella('User');
+```js
+var User = modella('User');
 
-    User.validate(function(user) {
-      if(!user.username()) {
-        user.error('username', "is required");
-      }
-    });
+User.validate(function(user) {
+  if(!user.username()) {
+    user.error('username', "is required");
+  }
+});
+```
 
 # Working with Instances
 
-### new Model([initialValues])
+### new Model( [attrs] )
 
 You can create instances of models with the `new` operator. You can also specify
-initial values by passing in an object for `initialValues`
+initial values by passing in an object for `attrs`.
 
-    var user = new User();
+```js
+var user = new User();
 
-    var bob = new User({username: 'Bob' });
+var bob = new User({username: 'Bob' });
+```
 
 ### Model#attribute(value)
 
 Sets the given attribute to a value.
 
-    var user = new User();
+```js
+var user = new User();
 
-    user.username("Bob");
+user.username("Bob");
+```
 
 ### Model#attribute()
 
 Returns the value of the attribute
 
-    var user = new User({username: 'Bob'});
+```js
+var user = new User({username: 'Bob'});
 
-    user.username()
-      => 'Bob'
+user.username() // => 'Bob'
+```
 
-### Model#get( attribute )
+### Model#get( attr )
 
 Returns the value of the attribute
 
-    var user = new User({username: 'Bob'});
+```js
+var user = new User({username: 'Bob'});
 
-    user.get('username')
-      => 'Bob'
+user.get('username') // => 'Bob'
+```
 
-### Model#has( attribute )
+### Model#has( attr )
 
 Returns whether an instance has an attribute set.
 
-    var user = new User({username: 'Bob'});
+```js
+var user = new User({username: 'Bob'});
 
-    user.has('email')
-      => false
+user.has('email') // => false
+```
 
-### Model#set( properties )
+### Model#set( attrs )
 
 Quickly sets multiple attributes.
 
-    var user = new User();
+```js
+var user = new User();
 
-    user.set({username: 'Bob', email: 'bob@bobbington.com'});
+user.set({username: 'Bob', email: 'bob@bobbington.com'});
+```
 
-### Model#primary()
+### Model#primary([ key ])
 
-Returns the value of the primary key attribute. By default, this auto-maps to an
-attribute with the name of `_id` or `id` if it specified.
+Gets or sets the value of the primary `key` attribute. By default, this auto-maps to an
+attribute with the name of `_id` or `id` if it is specified.
 
-    var User = modella('User').attr('_id');
+Getting the primary key:
 
-    var user = new User({_id: 123 });
+```js
+var User = modella('User').attr('_id');
+var user = new User({_id: 123 });
 
-    user.primary();
-      => 123
+user.primary(); // => 123
+```
 
-### Model#primary( value )
+Setting the primary key:
 
-Sets the value of the primary key to `value`. By default primary key will map to
-an attribute with the name of `_id` or `id`
+```js
+var User = modella('User').attr('_id');
+var user = new User({_id: 123 });
+user.primary(456);
 
-    var User = modella('User').attr('_id');
-
-    var user = new User({_id: 123 });
-
-    user.primary(456);
-
-    user.primary();
-      => 456
+user.primary(); // => 456
+```
 
 ### Model#isNew()
 
-Returns whether the value of `Model#primary()` is blank.
+Returns a boolean based on if the value of `Model#primary()` is set or not.
 
-    var user = new User();
-    user.isNew()
-      => true
+```js
+var user = new User();
+user.isNew() // => true
 
-    var oldUser = new User({_id: 555});
-    oldUser.isNew()
-      => false
+var oldUser = new User({_id: 555});
+oldUser.isNew() // => false
+```
 
 ### Model.isValid()
 
 Runs all validators on the model and returns whether any validations failed.
 
-    var validators = require('modella-validators');
+```js
+var User = modella('User')
+var validators = require('modella-validators');
 
-    var User = modella('User')
-    User.use(validators);
+User
+  .attr('username', { required: true })
+  .use(validators);
 
-    User.attr('username', { required: true });
+var user = new User();
 
-    var user = new User();
+user.isValid() // => false
+```
 
-    user.isValid()
-      => false
-
-### Model#save( [cb(err)] )
+### Model#save( [fn(err)] )
 
 Saves the model using the `syncLayer`. Will not attempt to save if
 `model#isValid()` returns false.
 
-Calls `cb(err)` after save.
+Calls `fn(err)` after save.
 
-### Model#remove( [cb(err)] )
+```js
+var User = modella('User')
+  .attr('_id')
+  .attr('name');
+
+var user = new User({ name: 'Charley' });
+
+user.save(function(err) {
+  // ...
+});
+```
+
+Using events:
+
+```js
+user.on('save', function() {
+  // all good!
+});
+
+user.on('error', function(err) {
+  // oh no!
+});
+
+user.save();
+```
+
+### Model#remove( [fn(err)] )
 
 Deletes the model using the sync layer and marks it as `removed`.
 
-Calls `cb(err)` after remove.
+Calls `fn(err)` after remove.
 
 ### Model#removed
 
 Marked as true if the model has been deleted.
 
-    user.remove()
+```js
+user.remove(function(err) {
+  // ...
+});
 
-    user.removed
-      => true
+user.removed // => true
+```
 
 ### Model#model
 
 Points to the base model from which the instance was created.
 
-    var user = new User();
+```js
+var user = new User();
 
-    user.model === User
-      => true
+user.model === User // => true
+```
 
 # Writing Plugins
 
@@ -245,34 +290,88 @@ guide](https://github.com/modella/modella/wiki/Plugin-Writing-Guide).
 All modella models have built in emitters on both instances and the model
 itself.
 
-You can listen for an event on either the `Model` or an `instance` of the Model.
-
-You can listen just once by running `once` instead of `on`.
+You can listen for an event on either the `instance` of a model or the `Model` itself. Here's how to listen on the instance:
 
 ```js
-  var user = new User()
-  User.on('save', function(u) {
-    user == u // true
-  });
+var user = new User()
 
-  user.once('save', function() {
-    user.remove(); // Why? Nobody knows...
-  });
+user.on('save', function() {
+  user.remove();
+});
 ```
+
+Listening on the `Model` is useful for performing aggregate operations on all instances. Here's how to listen on the `Model`:
+
+```js
+User.on('save', function(user) {
+  // user is the instance that performed save
+});
+```
+
 ## List of All Events
-
-### Validation Events
-
-- `invalid` trigger when `isValid()` or `validate()` fails.
-- `valid` trigger when `isValid()` or `validate()` passes.
 
 ### Save Events
 
-- `saving` triggers before saving has occurred.
-- `save` happens after a save has occurred.
-- `create` happens after a record is saved for the first time.
+- `save` triggers after a successful save.
+- `create` triggers after a record is saved for the first time.
+- `saving` triggers before saving has occurred. `saving` supports asynchronous callbacks.
+
+Synchronous callback:
+
+```js
+user.on('saving', function() {
+  // ...
+});
+```
+
+Asynchronous callback:
+
+```js
+user.on('saving', function(done) {
+  // ...
+  done();
+});
+```
+
+### Remove Events
+
+- `remove`: triggers after a successful removal.
+- `removing`: triggers before a remove has occurred. `removing` supports asynchronous callbacks.
+
+Synchronous callback:
+
+```js
+user.on('removing', function() {
+  // ...
+});
+```
+
+Asynchronous callback:
+
+```js
+user.on('removing', function(done) {
+  // ...
+  done();
+});
+```
+
+### Validation Events
+
+- `invalid` triggers when `isValid()` or `validate()` fails.
+- `valid` triggers when `isValid()` or `validate()` passes.
 
 ### Manipulation Events
+
+- `change <attr>` triggers when `attr` changes (via `set` or
+  `model.attr(val)`.
+
+```js
+user.on('change name', function(val, prev) {
+  // ...
+})
+
+user.name('charley');
+```
 
 - `initializing` triggers when a new `instance` is created. Passes `attrs` which
   can be modified by the listener.
@@ -281,6 +380,7 @@ You can listen just once by running `once` instead of `on`.
 User.on('initializing', function(instance, attrs) {
   attrs.name = attrs.name.toUpperCase();
 });
+
 var bob = new User({name: 'Bob'});
 bob.name() // => BOB
 ```
@@ -297,18 +397,19 @@ bob.set({name: 'Bob'});
 bob.name() // => BOB
 ```
 
-### Other Events
+### Miscellaneous Events
 
-- `initialize` triggers when a model has been completely initialized.
-- `change <attr>` triggers when `attr` changes (via `set` or
-  `model.attr(newVal)`.
 - `attr` triggers when a new attribute is added/changed (`Model.attr(name, options)`)
+- `initialize` triggers when a model has been completely initialized.
+- `error` triggers whenever there's an error syncing the model.
 
 # License
 
 (The MIT License)
 
 Copyright (c) 2013 Ryan Schmukler <ryan@slingingcode.com>
+
+Copyright (c) 2013 Matthew Mueller <mattmuelle@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the 'Software'), to deal in
