@@ -285,7 +285,7 @@ For types of plugins, and more comprehensive documentation, see the [plugin writ
 guide](https://github.com/modella/modella/wiki/Plugin-Writing-Guide).
 
 Here's some existing plugins to help you get started: [list of available
-plugins](https://github.com/modella/modella/wiki/List-of-Modella-Plugins)
+plugins](https://github.com/modella/modella/wiki/List-of-Modella-Plugins).
 
 # Events
 
