@@ -1,6 +1,16 @@
 # modella [![Build Status](https://secure.travis-ci.org/modella/modella.png?branch=master)](http://travis-ci.org/modella/modella)
 
-  Highly extendable bloat-free models.  
+  Highly extendable bloat-free models.
+
+## Installation
+
+With node.js:
+
+    npm install modella
+
+In the browser (using [component](https://github.com/component/component)):
+
+    component install modella/modella
 
 ## Philosophy
 
@@ -88,7 +98,7 @@ Sets the given attribute to a value.
 ### Model#attribute()
 
 Returns the value of the attribute
-    
+
     var user = new User({username: 'Bob'});
 
     user.username()
