@@ -1,4 +1,9 @@
 
+0.2.3 / 2013-11-30 
+==================
+
+ * added emit `attar` when an attar is added/changed
+
 0.2.2 / 2013-11-30
 ==================
 
