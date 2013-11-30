@@ -34,11 +34,11 @@ var modella = require('modella');
 var User = modella('User');
 ```
 
-### Model.use ( [environment], fn )
+### Model.use ( [env], fn )
 
 As mentioned in the philosophy, `modella`'s goal is to make it easy to extend
 models with plugins. This lets you create models that do exactly what you need,
-and nothing more. You can use `environment` to target the client and the server separately.
+and nothing more. You can use `env` to target the client and the server separately.
 
 ```js
 var modella = require('modella');
