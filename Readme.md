@@ -33,17 +33,33 @@ Creates a new model with the name `modelName`.
            User = modella('User');
 
 
-### Model.use ( modellaPlugin )
+### Model.use ( [environment], modellaPlugin )
 
 As mentioned in the philosophy, `modella`'s goal is to make it easy to extend
 models with plugins. This lets you create models that do exactly what you need,
-and nothing more.
+and nothing more. You can use `environment` to target the client and the server separately.
 
     var modella = require('modella'),
      validators = require('modella-validators'),
            User = modella('User');
 
     User.use(validators);
+
+Browser plugin:
+
+```js
+User.use('client', plugin);
+// or
+User.use('browser', plugin);
+```
+
+Server plugin:
+
+```js
+User.use('server', plugin);
+// or
+User.use('node', plugin);
+```
 
 ### Model.attr( attrName, [options] )
 
