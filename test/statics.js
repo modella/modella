@@ -27,6 +27,18 @@ describe('Model.attr', function() {
     var Pet = model('Pet').attr('name', {defaultValue: 'Samson'});
     expect(Pet._defaults).to.have.property('name', 'Samson');
   });
+
+  it("emits attr event", function(done) {
+    var Pet = model('Pet');
+
+    Pet.on('attr', function(attr, options) {
+      expect(options.defaultValue).to.eql('Samson');
+      expect(attr).to.eql('name');
+      done();
+    });
+
+    Pet.attr('name', {defaultValue: 'Samson'});
+  });
 });
 
 describe("Model.validate", function() {

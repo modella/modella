@@ -286,6 +286,7 @@ bob.name() // => BOB
 - `initialize` triggers when a model has been completely initialized.
 - `change <attr>` triggers when `attr` changes (via `set` or
   `model.attr(newVal)`.
+- `attr` triggers when a new attribute is added/changed (`Model.attr(name, options)`)
 
 # License
 
