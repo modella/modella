@@ -162,7 +162,7 @@ var user = new User();
 user.set({username: 'Bob', email: 'bob@bobbington.com'});
 ```
 
-### Model#primary([ key ])
+### Model#primary( [key] )
 
 Gets or sets the value of the primary `key` attribute. By default, this auto-maps to an
 attribute with the name of `_id` or `id` if it is specified.
