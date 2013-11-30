@@ -140,6 +140,7 @@ Returns the value of the attribute
 var user = new User({username: 'Bob'});
 
 user.get('username') // => 'Bob'
+```
 
 ### Model#has( attr )
 
@@ -407,6 +408,7 @@ bob.name() // => BOB
 (The MIT License)
 
 Copyright (c) 2013 Ryan Schmukler <ryan@slingingcode.com>
+
 Copyright (c) 2013 Matthew Mueller <mattmuelle@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
