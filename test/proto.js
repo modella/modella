@@ -240,6 +240,22 @@ describe('Model#remove()', function() {
       user.remove();
     });
 
+    it('doesn\'t validate on "removing"', function(done) {
+      User.validate(function(user) {
+        user.error('name', 'is required');
+      })
+
+      user.on('removing', function(obj, fn) {
+        user.error('age', 'is required');
+        fn();
+      });
+
+      user.remove(function(err) {
+        expect(!err);
+        done();
+      });
+    });
+
     it('emits "remove" on the constructor', function(done) {
       User.once('remove', function(obj) {
         expect(obj).to.equal(user);
