@@ -9,10 +9,14 @@ var model = require("../"),
  * Initialize `User`
  */
 
-var User = model('User')
+var User;
+
+beforeEach(function() {
+  User = model('User')
   .attr('id', { type: 'number' })
   .attr('name', { type: 'string' })
   .attr('age', { type: 'number' });
+});
 
 /**
  * Test proto
@@ -236,6 +240,22 @@ describe('Model#remove()', function() {
       user.remove();
     });
 
+    it('doesn\'t validate on "removing"', function(done) {
+      User.validate(function(user) {
+        user.error('name', 'is required');
+      })
+
+      user.on('removing', function(obj, fn) {
+        user.error('age', 'is required');
+        fn();
+      });
+
+      user.remove(function(err) {
+        expect(!err);
+        done();
+      });
+    });
+
     it('emits "remove" on the constructor', function(done) {
       User.once('remove', function(obj) {
         expect(obj).to.equal(user);
@@ -286,6 +306,59 @@ describe("Model#save()", function() {
         done();
       });
       user.save();
+    });
+
+    it('validates on saving events', function(done) {
+      user.once('saving', function(obj, fn) {
+        setTimeout(function() {
+          obj.errors.push(new Error('not valid'))
+          fn();
+        }, 10);
+      });
+
+      user.once('saving', function(obj, fn) {
+        setTimeout(function() {
+          obj.errors.push(new Error('other not valid'))
+          fn();
+        }, 15);
+      });
+
+      user.save(function(err) {
+        expect(err.message).to.equal('validation failed');
+        expect(user.errors.length).to.equal(1); // run('saving') callsback on the first error
+        expect(user.errors[0].message).to.equal('not valid');
+        done();
+      });
+    });
+
+    it('validates .validate on saving event', function(done) {
+      User.validate(function(user) {
+        if(!user.name()) {
+          user.error('name', "is required");
+        }
+      });
+
+      User.validate(function(user) {
+        if(!user.age()) {
+          user.error('age', "is required");
+        }
+      });
+
+      User.once('saving', function(obj, fn) {
+        obj.name(null);
+        fn();
+      });
+
+      var user = new User({name: 'marie', age: 30});
+      user.model.save = save;
+
+      user.save(function(err) {
+        expect(err.message).to.equal('validation failed');
+        expect(user.errors.length).to.equal(1); // run('saving') callsback on the first error
+        expect(user.errors[0].message).to.equal('is required');
+        expect(user.errors[0].attr).to.equal('name');
+        done();
+      });
     });
 
     it('emits "save" on the constructor', function(done) {
@@ -467,10 +540,3 @@ describe("Model#save()", function() {
     });
   });
 });
-
-
-
-
-
-
-
