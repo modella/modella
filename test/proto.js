@@ -16,6 +16,10 @@ beforeEach(function() {
   .attr('id', { type: 'number' })
   .attr('name', { type: 'string' })
   .attr('age', { type: 'number' });
+
+  User.prototype.throwError = function() {
+    throw new Error("I shouldn't get called");
+  };
 });
 
 /**
@@ -29,8 +33,8 @@ describe('Model#changed()', function(){
     user.name('foo');
     expect(user.changed()).to.eql({ name: 'foo' });
     expect(user.changed()).to.not.equal(user.dirty);
-  })
-})
+  });
+});
 
 describe('Model#changed(attr)', function(){
   it('should return a boolean if attr was changed', function(){
@@ -38,8 +42,8 @@ describe('Model#changed(attr)', function(){
     expect(user.changed('name')).to.eql(false);
     user.name('foo');
     expect(user.changed('name')).to.eql(true);
-  })
-})
+  });
+});
 
 describe('Model#<attr>(value)', function() {
   var user;
@@ -106,6 +110,11 @@ describe('Model#set(attrs)', function() {
     var user = new User();
     user.set({ omg : 'lol' });
     expect(user.omg).to.be(undefined);
+  });
+
+  it('should not call methods with the same name', function(){
+    var user = new User();
+    user.set({ throwError : 'lol' });
   });
 
   it('emits setting on the Model', function(){
