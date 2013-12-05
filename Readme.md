@@ -316,15 +316,7 @@ User.on('save', function(user) {
 
 - `save` triggers after a successful save.
 - `create` triggers after a record is saved for the first time.
-- `saving` triggers before saving has occurred. `saving` supports asynchronous callbacks.
-
-Synchronous callback:
-
-```js
-user.on('saving', function() {
-  // ...
-});
-```
+- `saving` triggers before saving has occurred. `saving` requires asynchronous callbacks so that validation can occur.
 
 Asynchronous callback:
 
