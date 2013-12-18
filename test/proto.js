@@ -297,10 +297,14 @@ describe("Model#save()", function() {
   });
 
   it("runs validations", function (done) {
+    var called = false;
     user.validate = function() {
-      done();
+      called = true;
     };
-    user.save();
+    user.save(function() {
+      expect(called).to.be(true);
+      done();
+    });
   });
 
   describe("when valid", function() {
@@ -320,14 +324,14 @@ describe("Model#save()", function() {
     it('validates on saving events', function(done) {
       user.once('saving', function(obj, fn) {
         setTimeout(function() {
-          obj.errors.push(new Error('not valid'))
+          obj.errors.push(new Error('not valid'));
           fn();
         }, 10);
       });
 
       user.once('saving', function(obj, fn) {
         setTimeout(function() {
-          obj.errors.push(new Error('other not valid'))
+          obj.errors.push(new Error('other not valid'));
           fn();
         }, 15);
       });
