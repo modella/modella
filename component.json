@@ -1,12 +1,11 @@
 {
   "name": "modella",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "repo": "modella/modella",
   "description": "simplified models",
   "dependencies": {
     "component/emitter": "1.0.1",
-    "ForbesLindesay/is-browser": "2.0.0",
-    "ramitos/map-series": "0.0.2"
+    "ForbesLindesay/is-browser": "2.0.0"
   },
   "scripts": [
     "index.js",
