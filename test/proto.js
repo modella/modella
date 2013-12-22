@@ -241,9 +241,16 @@ describe('Model#remove()', function() {
       user.remove();
     });
 
-    it('emits "removing"', function(done) {
-      user.on('removing', function(obj) {
-        expect(obj).to.equal(user);
+    it('emits "removing" on model', function(done) {
+      User.on('removing', function(instance) {
+        expect(instance).to.be(user);
+        done();
+      });
+      user.remove();
+    });
+
+    it('emits "removing" on instance', function(done) {
+      user.on('removing', function() {
         done();
       });
       user.remove();
@@ -252,9 +259,9 @@ describe('Model#remove()', function() {
     it('doesn\'t validate on "removing"', function(done) {
       User.validate(function(user) {
         user.error('name', 'is required');
-      })
+      });
 
-      user.on('removing', function(obj, fn) {
+      user.on('removing', function(fn) {
         user.error('age', 'is required');
         fn();
       });
@@ -313,19 +320,28 @@ describe("Model#save()", function() {
       user.save();
     });
 
-    it('emits "saving"', function(done) {
-      user.once('saving', function(obj) {
+    it('emits "saving" on model', function(done) {
+      User.once('saving', function(obj, next) {
         expect(obj).to.equal(user);
+        expect(next).to.be.a('function');
+        done();
+      });
+      user.save();
+    });
+
+    it('emits "saving" on instance', function(done) {
+      user.once('saving', function(next) {
+        expect(next).to.be.a('function');
         done();
       });
       user.save();
     });
 
     it('validates on saving events', function(done) {
-      user.once('saving', function(obj, fn) {
+      user.once('saving', function(next) {
         setTimeout(function() {
-          obj.errors.push(new Error('not valid'));
-          fn();
+          user.errors.push(new Error('not valid'));
+          next();
         }, 10);
       });
 

@@ -325,25 +325,28 @@ user.on('saving', function(done) {
   // ...
   done();
 });
+
+User.on('saving', function(user, done) {
+  // ...
+  done();
+});
 ```
 
 ### Remove Events
 
 - `remove`: triggers after a successful removal.
-- `removing`: triggers before a remove has occurred. `removing` supports asynchronous callbacks.
-
-Synchronous callback:
-
-```js
-user.on('removing', function() {
-  // ...
-});
-```
+- `removing`: triggers before a remove has occurred. `removing` must call an
+  asynchronous callback so that execution can continue
 
 Asynchronous callback:
 
 ```js
 user.on('removing', function(done) {
+  // ...
+  done();
+});
+
+User.on('removing', function(user, done) {
   // ...
   done();
 });
