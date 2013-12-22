@@ -1,4 +1,11 @@
 
+0.2.6 / 2013-12-21 
+==================
+
+ * Saving and removing now have appropriate `fn` signatures depending on Model
+ vs instance listeners. Ie. `User.on('saving', function(instance, done))` and
+ `user.on('saving', function(done));`
+
 0.2.5 / 2013-12-17 
 ==================
  * removed map-series dependency
