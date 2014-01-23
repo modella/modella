@@ -1,4 +1,20 @@
 
+0.2.6 / 2013-12-21 
+==================
+
+ * Saving and removing now have appropriate `fn` signatures depending on Model
+ vs instance listeners. Ie. `User.on('saving', function(instance, done))` and
+ `user.on('saving', function(done));`
+
+0.2.5 / 2013-12-17 
+==================
+ * removed map-series dependency
+
+0.2.4 / 2013-12-01 
+==================
+
+ * Fix for where .set would call methods if they existed, even if they weren't attrs
+
 0.2.3 / 2013-11-30 
 ==================
 

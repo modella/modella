@@ -16,6 +16,10 @@ beforeEach(function() {
   .attr('id', { type: 'number' })
   .attr('name', { type: 'string' })
   .attr('age', { type: 'number' });
+
+  User.prototype.throwError = function() {
+    throw new Error("I shouldn't get called");
+  };
 });
 
 /**
@@ -29,8 +33,8 @@ describe('Model#changed()', function(){
     user.name('foo');
     expect(user.changed()).to.eql({ name: 'foo' });
     expect(user.changed()).to.not.equal(user.dirty);
-  })
-})
+  });
+});
 
 describe('Model#changed(attr)', function(){
   it('should return a boolean if attr was changed', function(){
@@ -38,8 +42,8 @@ describe('Model#changed(attr)', function(){
     expect(user.changed('name')).to.eql(false);
     user.name('foo');
     expect(user.changed('name')).to.eql(true);
-  })
-})
+  });
+});
 
 describe('Model#<attr>(value)', function() {
   var user;
@@ -106,6 +110,11 @@ describe('Model#set(attrs)', function() {
     var user = new User();
     user.set({ omg : 'lol' });
     expect(user.omg).to.be(undefined);
+  });
+
+  it('should not call methods with the same name', function(){
+    var user = new User();
+    user.set({ throwError : 'lol' });
   });
 
   it('emits setting on the Model', function(){
@@ -232,9 +241,16 @@ describe('Model#remove()', function() {
       user.remove();
     });
 
-    it('emits "removing"', function(done) {
-      user.on('removing', function(obj) {
-        expect(obj).to.equal(user);
+    it('emits "removing" on model', function(done) {
+      User.on('removing', function(instance) {
+        expect(instance).to.be(user);
+        done();
+      });
+      user.remove();
+    });
+
+    it('emits "removing" on instance', function(done) {
+      user.on('removing', function() {
         done();
       });
       user.remove();
@@ -243,9 +259,9 @@ describe('Model#remove()', function() {
     it('doesn\'t validate on "removing"', function(done) {
       User.validate(function(user) {
         user.error('name', 'is required');
-      })
+      });
 
-      user.on('removing', function(obj, fn) {
+      user.on('removing', function(fn) {
         user.error('age', 'is required');
         fn();
       });
@@ -288,10 +304,14 @@ describe("Model#save()", function() {
   });
 
   it("runs validations", function (done) {
+    var called = false;
     user.validate = function() {
-      done();
+      called = true;
     };
-    user.save();
+    user.save(function() {
+      expect(called).to.be(true);
+      done();
+    });
   });
 
   describe("when valid", function() {
@@ -300,25 +320,34 @@ describe("Model#save()", function() {
       user.save();
     });
 
-    it('emits "saving"', function(done) {
-      user.once('saving', function(obj) {
+    it('emits "saving" on model', function(done) {
+      User.once('saving', function(obj, next) {
         expect(obj).to.equal(user);
+        expect(next).to.be.a('function');
+        done();
+      });
+      user.save();
+    });
+
+    it('emits "saving" on instance', function(done) {
+      user.once('saving', function(next) {
+        expect(next).to.be.a('function');
         done();
       });
       user.save();
     });
 
     it('validates on saving events', function(done) {
-      user.once('saving', function(obj, fn) {
+      user.once('saving', function(next) {
         setTimeout(function() {
-          obj.errors.push(new Error('not valid'))
-          fn();
+          user.errors.push(new Error('not valid'));
+          next();
         }, 10);
       });
 
       user.once('saving', function(obj, fn) {
         setTimeout(function() {
-          obj.errors.push(new Error('other not valid'))
+          obj.errors.push(new Error('other not valid'));
           fn();
         }, 15);
       });
