@@ -315,10 +315,6 @@ describe("Model#save()", function() {
   });
 
   describe("when valid", function() {
-    it('emits "save"', function(done) {
-      user.once('save', done);
-      user.save();
-    });
 
     it('emits "saving" on model', function(done) {
       User.once('saving', function(obj, next) {
@@ -332,6 +328,20 @@ describe("Model#save()", function() {
     it('emits "saving" on instance', function(done) {
       user.once('saving', function(next) {
         expect(next).to.be.a('function');
+        done();
+      });
+      user.save();
+    });
+
+    it('emits "saving" on model', function(done) {
+      User.once('saving', function() {
+        done();
+      });
+      user.save();
+    });
+
+    it('emits "save" on instance', function(done) {
+      user.once('saving', function() {
         done();
       });
       user.save();
