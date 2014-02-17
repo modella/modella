@@ -20,6 +20,15 @@ beforeEach(function() {
   User.prototype.throwError = function() {
     throw new Error("I shouldn't get called");
   };
+
+  // Build in a bogus sync-layer
+  User.save = function(fn) {
+    fn();
+  };
+
+  User.update = function(fn) {
+    fn();
+  };
 });
 
 /**
@@ -333,19 +342,21 @@ describe("Model#save()", function() {
       user.save();
     });
 
-    it('emits "saving" on model', function(done) {
-      User.once('saving', function() {
-        done();
-      });
-      user.save();
-    });
-
     it('emits "save" on instance', function(done) {
       user.once('saving', function() {
         done();
       });
       user.save();
     });
+
+    it('emits "save" on the model', function(done) {
+      User.once('save', function(obj) {
+        expect(obj).to.equal(user);
+        done();
+      });
+      user.save();
+    });
+
 
     it('validates on saving events', function(done) {
       user.once('saving', function(next) {
@@ -400,20 +411,61 @@ describe("Model#save()", function() {
       });
     });
 
-    it('emits "save" on the constructor', function(done) {
-      User.once('save', function(obj) {
-        expect(obj).to.equal(user);
-        done();
+    describe('creation events', function() {
+      var user;
+      beforeEach(function() {
+        user = new User({name: 'marie', age: 30});
       });
-      user.save();
-    });
 
-    it('emits "saving" on the constructor', function(done) {
-      User.once('saving', function(obj) {
-        expect(obj).to.equal(user);
-        done();
+      it('emits "creating" events on model', function(done) {
+        User.once('creating', function(u) {
+          expect(u).to.be(user);
+          done();
+        });
+        user.save();
       });
-      user.save();
+
+      it('emits "creating" events on instance', function(done) {
+        user.once('creating', function(next) {
+          expect(next).to.be.a(Function);
+          done();
+        });
+        user.save();
+      });
+
+      it('emits "create" events on model', function(done) {
+        User.once('create', function(u) {
+          expect(u).to.be(user);
+          done();
+        });
+        user.save();
+      });
+
+      it('emits "create" events on instance', function(done) {
+        user.once('create', done);
+        user.save();
+      });
+
+      it('does not emit create events if not new', function(done) {
+        var instanceCall = false, modelCall = false;
+
+        var instanceFn = function(next) { instanceCall = true; if(next) next(); },
+            modelFn = function(instance, next) { modelCall = false; if(next) next(); };
+
+        User.once('creating', modelFn);
+        User.once('create', modelFn);
+
+        user.once('creating', instanceFn);
+        user.once('create', instanceFn);
+
+        user.primary(123);
+
+        user.save(function() {
+          expect(instanceCall).to.be(false);
+          expect(modelCall).to.be(false);
+          done();
+        });
+      });
     });
 
     it('updates attributes based on save response', function(done) {
