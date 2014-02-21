@@ -3,6 +3,9 @@ test:
 	@./node_modules/.bin/mocha \
 		--reporter spec
 
+components: component.json
+		@component install --dev
+
 dist: components dist-build dist-minify
 
 dist-build:
