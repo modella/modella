@@ -325,6 +325,29 @@ describe("Model#save()", function() {
 
   describe("when valid", function() {
 
+    it('does not destroy listeners when running them', function(done) {
+      var SomeModel = model('SomeModel');
+      var callCount = 0;
+      SomeModel.save = function(cb) {
+        cb();
+      };
+      SomeModel.on('creating', function(instance, done) {
+        callCount++;
+        done();
+      });
+
+      var a = new SomeModel(),
+          b = new SomeModel();
+
+      a.save(function() {
+        b.save(function() {
+          expect(callCount).to.be(2);
+          done();
+        });
+      });
+
+    });
+
     it('emits "saving" on model', function(done) {
       User.once('saving', function(obj, next) {
         expect(obj).to.equal(user);
