@@ -568,6 +568,19 @@ describe("Model#save()", function() {
       var obj = user.toJSON();
       expect(obj.name).to.equal('matt');
     });
+    
+    it('should be recursive', function() {
+      var Master = model('Master')
+        .attr('name')
+        .attr('servant');
+      var tobi = new User({ name: 'Tobi', age: 2 });
+      var master = new Master({ name: 'Harry', servant: tobi });
+
+      var obj = master.toJSON();
+      expect(obj.name).to.equal('Harry');
+      expect(obj.servant.name).to.equal('Tobi');
+      expect(obj.servant.age).to.equal(2);
+    });
   });
 
   describe('Model#isValid()', function() {
