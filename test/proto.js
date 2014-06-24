@@ -2,8 +2,8 @@
  * Module dependencies
  */
 
-var model = require("../"),
-    expect = require('expect.js');
+var assert = require('assert');
+var model = require("../");
 
 /**
  * Initialize `User`
@@ -13,9 +13,9 @@ var User;
 
 beforeEach(function() {
   User = model('User')
-  .attr('id', { type: 'number' })
-  .attr('name', { type: 'string' })
-  .attr('age', { type: 'number' });
+    .attr('id', { type: 'number' })
+    .attr('name', { type: 'string' })
+    .attr('age', { type: 'number' });
 
   User.prototype.throwError = function() {
     throw new Error("I shouldn't get called");
@@ -29,19 +29,19 @@ beforeEach(function() {
 describe('Model#changed()', function(){
   it('should return a cloned object of changed attrs', function(){
     var user = new User({ name: 'baz' });
-    expect(user.changed()).to.eql({});
-    user.name('foo');
-    expect(user.changed()).to.eql({ name: 'foo' });
-    expect(user.changed()).to.not.equal(user.dirty);
+    assert(0 == Object.keys(user.changed()).length);
+    user.name = 'foo';
+    assert('foo' == user.changed().name);
+    assert(user.dirty != user.changed());
   });
 });
 
 describe('Model#changed(attr)', function(){
   it('should return a boolean if attr was changed', function(){
     var user = new User({ name: 'baz' });
-    expect(user.changed('name')).to.eql(false);
-    user.name('foo');
-    expect(user.changed('name')).to.eql(true);
+    assert(false == user.changed('name'));
+    user.name = 'foo';
+    assert(true == user.changed('name'));
   });
 });
 
@@ -49,135 +49,134 @@ describe('Model#<attr>(value)', function() {
   var user;
 
   beforeEach(function() {
-    user = new User({name: 'Tobi', age: 22});
-  });
-
-  it('returns itself', function() {
-    expect(user.name('Bob')).to.equal(user);
+    user = new User({ name: 'Tobi', age: 22 });
   });
 
   it('sets a value', function() {
-    user.name('Bob');
-    expect(user.name()).to.equal('Bob');
+    user.name = 'Bob';
+    assert('Bob' == user.name);
   });
 
   it('emits "change:<attr>" events', function(done){
-    user.on('change name', function(newVal, old) {
-      expect(newVal).to.equal('Bob');
-      expect(old).to.equal('Tobi');
+    user.on('change name', function(val, prev) {
+      assert('Bob' == val);
+      assert('Tobi' == prev);
       done();
     });
 
-    user.name('Bob');
+    user.name = 'Bob';
   });
 
   it('emits "change" events', function(done) {
-    user.on('change', function(prop, newVal, old) {
-      expect(prop).to.equal('name');
-      expect(newVal).to.equal('Bob');
-      expect(old).to.equal('Tobi');
+    user.on('change', function(prop, val, prev) {
+      assert('name' == prop);
+      assert('Tobi' == prev);
+      assert('Bob' == val);
       done();
     });
 
-    user.name('Bob');
+    user.name = 'Bob';
   });
 
   it('marks the attr as dirty', function() {
-    user.name('Bob');
-    expect(user.changed('name')).to.be(true);
+    user.name = 'Bob';
+    assert(true == user.changed('name'));
   });
 
   describe('with the same value', function() {
     it("doesn't mark it as dirty", function() {
-      user.name('Tobi');
-      expect(user.changed('name')).to.be(false);
+      user.name = 'Tobi';
+      assert(false == user.changed('name'));
     });
   });
 });
 
-describe('Model#set(attrs)', function() {
-  it('should set multiple attributes', function() {
-    var user = new User();
-    user.set({
-      name : 'matt',
-      age : 23
-    });
-    expect(user.name()).to.equal('matt');
-    expect(user.age()).to.equal(23);
-  });
+// describe('Model#set(attrs)', function() {
+//   it('should set multiple attributes', function() {
+//     var user = new User();
+//     user.set({
+//       name : 'matt',
+//       age : 23
+//     });
+//     expect(user.name()).to.equal('matt');
+//     expect(user.age()).to.equal(23);
+//   });
 
-  it('should ignore attributes not in schema', function(){
-    var user = new User();
-    user.set({ omg : 'lol' });
-    expect(user.omg).to.be(undefined);
-  });
+//   it('should ignore attributes not in schema', function(){
+//     var user = new User();
+//     user.set({ omg : 'lol' });
+//     expect(user.omg).to.be(undefined);
+//   });
 
-  it('should not call methods with the same name', function(){
-    var user = new User();
-    user.set({ throwError : 'lol' });
-  });
+//   it('should not call methods with the same name', function(){
+//     var user = new User();
+//     user.set({ throwError : 'lol' });
+//   });
 
-  it('emits setting on the Model', function(){
-    var user = new User();
-    User.once('setting', function(user, attrs) {
-      attrs.name = 'ryan';
-    });
-    user.set({ name : 'matt' });
-    expect(user.name()).to.be('ryan');
-  });
+//   it('emits setting on the Model', function(){
+//     var user = new User();
+//     User.once('setting', function(user, attrs) {
+//       attrs.name = 'ryan';
+//     });
+//     user.set({ name : 'matt' });
+//     expect(user.name()).to.be('ryan');
+//   });
 
-  it('emits setting on the instance', function(){
-    var user = new User();
-    user.once('setting', function(attrs) {
-      attrs.name = 'ryan';
-    });
-    user.set({ name : 'matt' });
-    expect(user.name()).to.be('ryan');
-  });
-});
+//   it('emits setting on the instance', function(){
+//     var user = new User();
+//     user.once('setting', function(attrs) {
+//       attrs.name = 'ryan';
+//     });
+//     user.set({ name : 'matt' });
+//     expect(user.name()).to.be('ryan');
+//   });
+// });
 
 describe('Model#isNew()', function() {
+  var user;
+
   it('defaults to true', function() {
     var user = new User();
-    expect(user.isNew()).to.equal(true);
+    assert(true == user.isNew());
   });
 
   it('is false when primary key is present', function() {
     var user = new User({ id: 1 });
-    expect(user.isNew()).to.equal(false);
+    assert(false == user.isNew());
   });
 });
 
 describe('Model#model', function() {
   it('references the constructor', function() {
     var user = new User();
-    expect(user.model).to.equal(User);
+    assert(User == user.model);
   });
 });
 
-describe('Model#get(attr)', function() {
-  it('returns an attr value', function() {
-    var user = new User({ name: 'Tobi' });
-    expect(user.get('name')).to.equal('Tobi');
-  });
-});
+// describe('Model#get(attr)', function() {
+//   it('returns an attr value', function() {
+//     var user = new User({ name: 'Tobi' });
+//     assert('Tobi')
+//     expect(user.get('name')).to.equal('Tobi');
+//   });
+// });
 
-describe('Model#has(attr)', function() {
-  var user;
+// describe('Model#has(attr)', function() {
+//   var user;
 
-  beforeEach(function() {
-    user = new User({ name: 'Tobi' });
-  });
+//   beforeEach(function() {
+//     user = new User({ name: 'Tobi' });
+//   });
 
-  it('returns true if the object has the attr', function() {
-    expect(user.has('name')).to.equal(true);
-  });
+//   it('returns true if the object has the attr', function() {
+//     expect(user.has('name')).to.equal(true);
+//   });
 
-  it('returns false if the object doesn\'t have the attr', function() {
-    var user = new User();
-    expect(user.has('age')).to.equal(false);
-  });
-});
+//   it('returns false if the object doesn\'t have the attr', function() {
+//     var user = new User();
+//     expect(user.has('age')).to.equal(false);
+//   });
+// });
 
 describe('Model#remove()', function() {
   function remove(fn) {
@@ -187,13 +186,13 @@ describe('Model#remove()', function() {
   it('throws an error if it\'s new', function(done) {
     var user = new User();
     user.remove(function(err) {
-      expect(err.message).to.equal('not saved');
+      assert('not saved' == err.message);
       done();
     });
   });
 
   it('calls Model.remove', function(done) {
-    var user = new User({id: 123});
+    var user = new User({ id: 123 });
     user.model.remove = remove;
     user.remove(done);
   });
@@ -205,13 +204,24 @@ describe('Model#remove()', function() {
       return fn(error);
     }
 
+    it('passes the error back', function(done) {
+      var user = new User({ id : 123 });
+      user.model.remove = remove;
+      user.remove(function(err) {
+        assert(err == error);
+        done();
+      })
+    })
+
     it('emits "error"', function(done) {
       var user = new User({ id : 123 });
       user.model.remove = remove;
+
       user.on('error', function(err) {
-        expect(err).to.equal(error);
+        assert(err == error);
         done();
       });
+
       user.remove();
     });
   });
@@ -224,15 +234,16 @@ describe('Model#remove()', function() {
     }
 
     beforeEach(function() {
-      user = new User({id: 123});
+      user = new User({ id: 123 });
       user.model.remove = remove;
     });
 
     it('sets removed to true', function(done) {
       user.on('remove', function() {
-        expect(user.removed).to.equal(true);
+        assert(true == user.removed);
         done();
       });
+
       user.remove();
     });
 
@@ -242,18 +253,43 @@ describe('Model#remove()', function() {
     });
 
     it('emits "removing" on model', function(done) {
-      User.on('removing', function(instance) {
-        expect(instance).to.be(user);
-        done();
+      User.on('removing', function(obj, next) {
+        assert(obj == user);
+        assert(obj instanceof User);
+        next(null);
       });
+
+      User.on('removing', function(obj) {
+        done()
+      });
+
       user.remove();
     });
 
-    it('emits "removing" on instance', function(done) {
-      user.on('removing', function() {
+    it('emits "removing" on model (async)', function(done) {
+      var called = false;
+      
+      User.on('removing', function(obj, next) {
+        assert(obj == user);
+        setTimeout(function() { 
+          called = true;
+          next(null);
+        }, 50);
+      });
+
+      user.remove(function() {
         done();
       });
-      user.remove();
+    })
+
+    it('emits "removing" on instance', function(done) {
+      user.on('removing', function(next) {
+        next();
+      });
+      user.remove(function(err) {
+        assert(!err);
+        done();
+      });
     });
 
     it('doesn\'t validate on "removing"', function(done) {
