@@ -4,19 +4,11 @@
   "repo": "modella/modella",
   "description": "simplified models",
   "dependencies": {
-    "component/clone": "^0.2.2",
+    "component/clone": "0.2.2",
     "component/emitter": "1.1.3",
-    "matthewmueller/extend.js": "*",
-    "component/assert": "*",
-    "matthewmueller/aemitter": "0.0.1"
-  },
-  "scripts": [
-    "index.js",
-    "lib/model.js",
-    "lib/proto.js",
-    "lib/static.js",
-    "lib/utils/clone.js",
-    "lib/utils/type.js"
-  ],
-  "remotes": []
+    "matthewmueller/extend.js": "0.0.1",
+    "matthewmueller/yieldly": "0.0.1",
+    "matthewmueller/ware": "0.4.0",
+    "component/assert": "1.1.1"
+  }
 }

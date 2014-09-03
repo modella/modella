@@ -1,3 +1,8 @@
+SRC = index.js lib/*.js
+
+default: test
+
+include node_modules/make-lint/index.mk
 
 test:
 	@./node_modules/.bin/mocha \
