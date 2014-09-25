@@ -67,7 +67,7 @@ User.use('node', plugin);
 ### Model.attr( name, [options] )
 
 Adds attribute `attrName` to a model. Additional `options` can be passed in as
-an object. Modella does not use these options, but plugins may.
+an object. Modella itself accepts the option `defaultValue` to specify the default value for the attribute. Plugins may extend the available options.
 
 ```js
 var modella = require('modella'),
@@ -79,7 +79,20 @@ User.use(validators);
 User
   .attr('_id')
   .attr('username', { required: true })
-  .attr('email', { required: true, format: 'email' });
+  .attr('email', { required: true, format: 'email' })
+  .attr('admin', { defaultValue: false };
+
+var user = new User({
+    username: 'bob',
+    email: 'bob@bobbington.com'
+});
+// user.admin() === false
+var adminUser = new User({
+    username: 'bobs_boss',
+    email: 'boss@bobbington.com',
+    admin: true
+})
+// adminUser.admin() === true
 ```
 
 ### Model.validate( fn )
