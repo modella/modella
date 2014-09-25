@@ -70,6 +70,11 @@ describe('Model#<attr>(value)', function() {
     expect(user.name()).to.equal('Bob');
   });
 
+  it('can unset a value', function() {
+    user.age(undefined);
+    expect(user.age()).to.equal(undefined);
+  });
+
   it('emits "change:<attr>" events', function(done){
     user.on('change name', function(newVal, old) {
       expect(newVal).to.equal('Bob');
@@ -115,6 +120,19 @@ describe('Model#set(attrs)', function() {
     expect(user.age()).to.equal(23);
   });
 
+  it('should unset values when passed as `undefined`', function() {
+    var user = new User({
+      name: 'Bob',
+      age: 23
+    });
+    user.set({
+      name: 'Tobi',
+      age: undefined
+    });
+    expect(user.name()).to.equal('Tobi');
+    expect(user.age()).to.equal(undefined);
+  });
+  
   it('should ignore attributes not in schema', function(){
     var user = new User();
     user.set({ omg : 'lol' });
@@ -168,6 +186,14 @@ describe('Model#get(attr)', function() {
   it('returns an attr value', function() {
     var user = new User({ name: 'Tobi' });
     expect(user.get('name')).to.equal('Tobi');
+  });
+});
+
+describe('Model#unset(attr)', function() {
+  it('unset an attribute', function() {
+    var user = new User({ name: 'Tobi' });
+    user.unset('name');
+    expect(user.get('name')).to.equal(undefined);
   });
 });
 
