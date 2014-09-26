@@ -607,6 +607,22 @@ describe("Model#save()", function() {
       expect(obj.servant.name).to.equal('Tobi');
       expect(obj.servant.age).to.equal(2);
     });
+    
+    it('should ignore attributes that are `undefined`', function() {
+      var Master = model('Master')
+        .attr('name')
+        .attr('servant')
+        .attr('skill');
+      var tobi = new User({ name: 'Tobi', age: 2 });
+      var master = new Master({ name: 'Harry', servant: tobi, skill: 'cleaning' });
+
+      master.unset('skill');
+      var obj = master.toJSON();
+      expect(obj.name).to.equal('Harry');
+      expect(obj.servant.name).to.equal('Tobi');
+      expect(obj.servant.age).to.equal(2);
+      expect(obj.skill).to.equal(undefined);
+    });
   });
 
   describe('Model#isValid()', function() {
