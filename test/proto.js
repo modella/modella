@@ -598,14 +598,29 @@ describe("Model#save()", function() {
     it('should be recursive', function() {
       var Master = model('Master')
         .attr('name')
-        .attr('servant');
+        .attr('servant')
+        .attr('isLazy');
       var tobi = new User({ name: 'Tobi', age: 2 });
-      var master = new Master({ name: 'Harry', servant: tobi });
+      var master = new Master({ name: 'Harry', servant: tobi, isLazy: true });
 
       var obj = master.toJSON();
       expect(obj.name).to.equal('Harry');
       expect(obj.servant.name).to.equal('Tobi');
       expect(obj.servant.age).to.equal(2);
+      expect(obj.isLazy).to.equal(true);
+    });
+    
+    it('should handle null values', function() {
+      var Master = model('Master')
+        .attr('name')
+        .attr('servant');
+      var tobi = new User({ name: 'Tobi', age: 2 });
+      var master = new Master({ name: 'Harry', servant: tobi });
+      master.servant(null);
+
+      var obj = master.toJSON();
+      expect(obj.name).to.equal('Harry');
+      expect(obj.servant).to.equal(null);
     });
     
     it('should ignore attributes that are `undefined`', function() {
