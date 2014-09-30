@@ -127,7 +127,8 @@ var bob = new User({username: 'Bob' });
 
 ### Model#attribute(value)
 
-Sets the given attribute to a value.
+Sets the given attribute to a value. Passing `undefined` will unset
+the attribute.
 
 ```js
 var user = new User();
@@ -155,6 +156,18 @@ var user = new User({username: 'Bob'});
 user.get('username') // => 'Bob'
 ```
 
+### Model#unset( attr )
+
+Unset the attribute
+
+```js
+var user = new User({username: 'Bob', age: 27});
+
+user.unset('username');
+
+// user.username() === undefined
+```
+
 ### Model#has( attr )
 
 Returns whether an instance has an attribute set.
@@ -167,7 +180,8 @@ user.has('email') // => false
 
 ### Model#set( attrs )
 
-Quickly sets multiple attributes.
+Quickly sets multiple attributes. Using `undefined` for a value will
+unset the attribute.
 
 ```js
 var user = new User();
