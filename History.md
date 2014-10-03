@@ -1,4 +1,11 @@
 
+0.2.9 / 2014-10-02 
+==================
+
+ * allow unsetting of an attribute
+ * Merge pull request #39 from paulbdavis/documentation
+ * recursive toJSON
+
 0.2.8 / 2014-03-05 
 ==================
 
