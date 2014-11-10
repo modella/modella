@@ -132,7 +132,7 @@ describe('Model#set(attrs)', function() {
     expect(user.name()).to.equal('Tobi');
     expect(user.age()).to.equal(undefined);
   });
-  
+
   it('should ignore attributes not in schema', function(){
     var user = new User();
     user.set({ omg : 'lol' });
@@ -587,6 +587,13 @@ describe("Model#save()", function() {
       expect(obj.age).to.equal(2);
     });
 
+    it('should support model#json() alias', function() {
+      var user = new User({ name: 'Tobi', age: 2 });
+      var obj = user.json();
+      expect(obj.name).to.equal('Tobi');
+      expect(obj.age).to.equal(2);
+    })
+
     it('should clone, not reference the object', function() {
       var json = { name : 'matt' };
       var user = new User(json);
@@ -594,7 +601,7 @@ describe("Model#save()", function() {
       var obj = user.toJSON();
       expect(obj.name).to.equal('matt');
     });
-    
+
     it('should be recursive', function() {
       var Master = model('Master')
         .attr('name')
@@ -609,7 +616,7 @@ describe("Model#save()", function() {
       expect(obj.servant.age).to.equal(2);
       expect(obj.isLazy).to.equal(true);
     });
-    
+
     it('should handle null values', function() {
       var Master = model('Master')
         .attr('name')
@@ -622,7 +629,7 @@ describe("Model#save()", function() {
       expect(obj.name).to.equal('Harry');
       expect(obj.servant).to.equal(null);
     });
-    
+
     it('should ignore attributes that are `undefined`', function() {
       var Master = model('Master')
         .attr('name')

@@ -303,6 +303,11 @@ var user = new User();
 user.model === User // => true
 ```
 
+### Model#json()
+### Model#toJSON()
+
+Gets the JSON representation of the model
+
 # Writing Plugins
 
 Modella is made to be extended! Use events to hook into modella and manipulate
