@@ -1,4 +1,9 @@
 
+0.2.11 / 2014-11-10
+==================
+
+  * support explicit primary keys via `{ primaryKey: true }`
+
 0.2.10 / 2014-11-10
 ==================
 
