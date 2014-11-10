@@ -39,6 +39,16 @@ describe('Model.attr', function() {
 
     Pet.attr('name', {defaultValue: 'Samson'});
   });
+
+  it('should replace implied primary key if explicit', function() {
+    var User = model('User')
+      .attr('id')
+      .attr('email', { primaryKey: true })
+
+    var user = User().id('1').email('a@b.com');
+
+    expect(user.primary()).to.eql('a@b.com');
+  })
 });
 
 describe("Model.validate", function() {
