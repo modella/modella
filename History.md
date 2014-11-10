@@ -1,39 +1,44 @@
 
-0.2.9 / 2014-10-02 
+0.2.10 / 2014-11-10
+==================
+
+  * add model#json() alias
+
+0.2.9 / 2014-10-02
 ==================
 
  * allow unsetting of an attribute
  * Merge pull request #39 from paulbdavis/documentation
  * recursive toJSON
 
-0.2.8 / 2014-03-05 
+0.2.8 / 2014-03-05
 ==================
 
  * fix Model.run destroying listeners
 
-0.2.7 / 2014-02-21 
+0.2.7 / 2014-02-21
 ==================
 
  * Added in 'creating' event.
  * remove duplicate type
 
-0.2.6 / 2013-12-21 
+0.2.6 / 2013-12-21
 ==================
 
  * Saving and removing now have appropriate `fn` signatures depending on Model
  vs instance listeners. Ie. `User.on('saving', function(instance, done))` and
  `user.on('saving', function(done));`
 
-0.2.5 / 2013-12-17 
+0.2.5 / 2013-12-17
 ==================
  * removed map-series dependency
 
-0.2.4 / 2013-12-01 
+0.2.4 / 2013-12-01
 ==================
 
  * Fix for where .set would call methods if they existed, even if they weren't attrs
 
-0.2.3 / 2013-11-30 
+0.2.3 / 2013-11-30
 ==================
 
  * added emit `attar` when an attar is added/changed
