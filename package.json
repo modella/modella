@@ -11,6 +11,9 @@
     "emitter-component": "1.0.1",
     "is-browser": "~2.0.0"
   },
+  "browser": {
+    "emitter": "emitter-component"
+  },
   "devDependencies": {
     "mocha": "*",
     "expect.js": "*",
