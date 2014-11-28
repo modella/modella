@@ -23,6 +23,12 @@ describe('model(name)', function() {
     var Something = model('Something');
     expect(Something).to.be.a('function');
   });
+
+  it('models are instances of Model', function(){
+    var Child = model('Child');
+    var child = new Child();
+    expect(child).to.be.a(model.Model);
+  });
 });
 
 describe('new Model(attrs)', function() {
