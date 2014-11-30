@@ -1,4 +1,9 @@
 
+0.2.13 / 2014-11-29
+==================
+
+  * add config for browserify, version bump for npm
+
 0.2.12 / 2014-11-10
 ==================
 
