@@ -1,6 +1,6 @@
 {
   "name": "modella",
-  "version": "0.2.12",
+  "version": "0.2.14",
   "repo": "modella/modella",
   "description": "simplified models",
   "dependencies": {
