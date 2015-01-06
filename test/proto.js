@@ -161,6 +161,12 @@ describe('Model#set(attrs)', function() {
     user.set({ name : 'matt' });
     expect(user.name()).to.be('ryan');
   });
+
+  it('considers "1" to true a changed value', function () {
+    var user = new User({ name : '1'});
+    user.set({ name : true });
+    expect(user.name()).to.be(true);
+  });
 });
 
 describe('Model#isNew()', function() {
