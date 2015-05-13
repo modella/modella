@@ -6,6 +6,7 @@
     "modella",
     "models"
   ],
+  "repository": "modella/modella",
   "author": "matthew mueller <mattmuelle@gmail.com>",
   "dependencies": {
     "emitter-component": "1.0.1",
