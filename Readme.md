@@ -70,8 +70,8 @@ Adds attribute `attrName` to a model. Additional `options` can be passed in as
 an object. Modella itself accepts the option `defaultValue` to specify the default value for the attribute. Plugins may extend the available options.
 
 ```js
-var modella = require('modella'),
-var validators = require('modella-validators'),
+var modella = require('modella');
+var validators = require('modella-validators');
 var User = modella('User');
 
 User.use(validators);
@@ -80,7 +80,7 @@ User
   .attr('_id')
   .attr('username', { required: true })
   .attr('email', { required: true, format: 'email' })
-  .attr('admin', { defaultValue: false };
+  .attr('admin', { defaultValue: false });
 
 var user = new User({
     username: 'bob',
